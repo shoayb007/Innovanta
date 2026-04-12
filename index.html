@@ -46,7 +46,7 @@ body{font-family:var(--font-body);color:var(--gray-800);background:var(--white);
 /* ---- NAV ---- */
 nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1rem 0;transition:all .4s}
 nav.scrolled{background:rgba(10,22,40,.95);backdrop-filter:blur(20px);padding:.6rem 0;box-shadow:0 4px 30px rgba(0,0,0,.15)}
-.nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;position:relative}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
 .nav-logo svg{width:38px;height:38px}
 .nav-logo span{font-family:var(--font-display);font-weight:700;font-size:1.25rem;color:var(--white)}
@@ -205,9 +205,6 @@ footer p{font-size:.82rem}
 }
 @media(max-width:768px){
   .nav-links{display:none}
-  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;width:100%;background:rgba(10,22,40,.97);backdrop-filter:blur(20px);padding:1.5rem 2rem 2rem;gap:1rem;border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 12px 30px rgba(0,0,0,.3)}
-  .nav-links.open a{font-size:1rem;padding:.5rem 0}
-  .nav-links.open .nav-cta{text-align:center;margin-top:.5rem}
   .hamburger{display:flex}
   .hero-inner{grid-template-columns:1fr;text-align:center;padding-top:7rem}
   .hero p{margin:0 auto 2rem}
@@ -485,11 +482,11 @@ footer p{font-size:.82rem}
     <div class="cta-box">
       <h2>Ready to Transform Your Business?</h2>
       <p>Book a free deep dive consultation and get your first insight into how Innovanta One can unlock new possibilities for your business.</p>
-      <a href="/cdn-cgi/l/email-protection#cab9a2a5abb3a88aa3a4a4a5bcaba4beabe4a5a4af" class="btn btn-primary">Book Your Free Consultation &#8594;</a>
+      <a href="mailto:shoayb@innovanta.one" class="btn btn-primary">Book Your Free Consultation &#8594;</a>
       <div class="cta-contacts">
-        <a href="/cdn-cgi/l/email-protection#2f5c47404e564d6f46414140594e415b4e0140414a">
+        <a href="mailto:shoayb@innovanta.one">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <span class="__cf_email__" data-cfemail="becdd6d1dfc7dcfed7d0d0d1c8dfd0cadf90d1d0db">[email&#160;protected]</span>
+          shoayb@innovanta.one
         </a>
         <a href="tel:+23059409601">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -524,16 +521,16 @@ footer p{font-size:.82rem}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Navbar scroll
 window.addEventListener('scroll',function(){
   document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
 });
-// Mobile menu close on link tap
-document.querySelectorAll('.nav-links a').forEach(function(link){
-  link.addEventListener('click',function(){
-    document.querySelector('.nav-links').classList.remove('open');
-  });
-});
 // Reveal on scroll
-var observer=new
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el)});
+</script>
+</body>
+</html>
