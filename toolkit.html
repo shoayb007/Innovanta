@@ -144,6 +144,8 @@
     display:flex;align-items:center;justify-content:center;
     padding:1rem;
     animation:fdIn .3s ease;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
   @keyframes fdIn{from{opacity:0}to{opacity:1}}
   @keyframes slUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
@@ -154,6 +156,13 @@
     overflow:hidden;
     box-shadow:var(--shl);
     animation:slUp .38s cubic-bezier(.34,1.4,.64,1);
+    max-height:calc(100vh - 2rem);
+    display:flex;flex-direction:column;
+  }
+  .mbdy{
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    flex:1;
   }
   .mhd{
     background:linear-gradient(140deg,var(--nd) 0%,var(--nv) 100%);
@@ -648,6 +657,29 @@
     .sph{display:block}
     .dl-card{padding:2rem 1.25rem}
     .contact-sec{padding:3.5rem 1.5rem}
+
+    /* ── Modal mobile fix ── */
+    #modal-overlay{
+      align-items:flex-start;
+      padding:.5rem;
+    }
+    #modal-box{
+      max-height:calc(100dvh - 1rem);
+      border-radius:14px;
+    }
+    .mhd{padding:1.1rem 1.25rem 1rem}
+    .mhd h2{font-size:1rem}
+    .mhd p{font-size:.75rem}
+    .mhd-logo{margin-bottom:.6rem}
+    .chips{gap:.25rem;margin-bottom:.9rem}
+    .chip{padding:.3rem .15rem;font-size:.52rem}
+    .chip span{font-size:.8rem}
+    .mbdy{padding:1.1rem 1.25rem 1.5rem}
+    .fg{margin-bottom:.75rem}
+    .priv{margin-bottom:.75rem;font-size:.67rem}
+    .macts{gap:.5rem}
+    .btn-prim{font-size:.8rem;padding:.65rem .9rem}
+    .btn-sec{font-size:.72rem;padding:.65rem .7rem}
   }
   </style>
   <!-- HubSpot tracking — replace XXXXXXXX with your Portal ID -->
