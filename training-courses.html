@@ -1207,7 +1207,7 @@ footer a:hover{color:var(--wh)}
       <h3>Your brochures are ready to download</h3>
       <p>Click the link for the course you requested — or download all three.</p>
       <div class="dl-links">
-        <a href="PMP_Exam_Prep_Brochure_Innovanta.pdf"
+        <a href="/assets/PMP_Exam_Prep_Brochure_Innovanta.pdf"
            class="dl-link-item" id="dl-link-target"
            download aria-label="Download PMP brochure PDF" onclick="trackDL('pmp')">
           <div class="dl-link-ico">📄</div>
@@ -1217,7 +1217,7 @@ footer a:hover{color:var(--wh)}
           </div>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v10M3 8l5 5 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M2 14h12" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
         </a>
-        <a href="PM_Essentials_Brochure_v2.pdf"
+        <a href="/assets/PM_Essentials_Brochure_v2.pdf"
            class="dl-link-item" id="dl-ess"
            download aria-label="Download Project Management Essentials brochure" onclick="trackDL('essentials')">
           <div class="dl-link-ico">📄</div>
@@ -1227,7 +1227,7 @@ footer a:hover{color:var(--wh)}
           </div>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v10M3 8l5 5 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M2 14h12" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
         </a>
-        <a href="Making_Digital_Transformation_Work.pdf"
+        <a href="/assets/Making_Digital_Transformation_Work.pdf"
            class="dl-link-item" id="dl-dig"
            download aria-label="Download Digital Transformation proposal" onclick="trackDL('digital')">
           <div class="dl-link-ico">📄</div>
@@ -1416,9 +1416,9 @@ footer a:hover{color:var(--wh)}
   /* ── MODAL STATE ── */
   var currentCourse = 'pmp';
   var courseFiles = {
-    pmp:        { file:'PMP_Exam_Prep_Brochure_Innovanta.pdf',   label:'PMP® Exam Preparation Brochure',         lsKey:'io_dl_pmp' },
-    essentials: { file:'PM_Essentials_Brochure_v2.pdf',           label:'Project Management Essentials Brochure',   lsKey:'io_dl_ess' },
-    digital:    { file:'Making_Digital_Transformation_Work.pdf',  label:'Digital Transformation Workshop Proposal', lsKey:'io_dl_dig' }
+    pmp:        { file:'/assets/PMP_Exam_Prep_Brochure_Innovanta.pdf',   label:'PMP® Exam Preparation Brochure',         lsKey:'io_dl_pmp' },
+    essentials: { file:'/assets/PM_Essentials_Brochure_v2.pdf',           label:'Project Management Essentials Brochure',   lsKey:'io_dl_ess' },
+    digital:    { file:'/assets/Making_Digital_Transformation_Work.pdf',  label:'Digital Transformation Workshop Proposal', lsKey:'io_dl_dig' }
   };
 
   /* ── OPEN MODAL ── */
