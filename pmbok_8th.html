@@ -242,7 +242,7 @@
       </div>
 
       <!-- HIGH-FIDELITY DETAILED STUDY PANEL -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl relative overflow-hidden">
+      <div id="study-panel-section" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl relative overflow-hidden">
         <!-- Visual Backdrop Effect -->
         <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -868,6 +868,7 @@
       ultimateSubmitted: false
     };
 
+    // --- STREAMING_CHUNK: Initializing Audio Engine ---
     // --- SYNTHESIZED SOUND EFFECTS ENGINE (Web Audio API) ---
     const AudioEngine = {
       ctx: null,
@@ -1037,7 +1038,7 @@
                 slot.className = `rounded-md p-1.5 flex flex-col justify-center min-h-[42px] cursor-grab active:cursor-grabbing transition-all border ${borderStyle} text-left`;
                 slot.draggable = !isSub; // Allow dragging cards off the board if not submitted yet
                 
-                // Set native alt-text tooltip with name and description (MANDATORY REQUIREMENT)
+                // Set native alt-text tooltip with name and description
                 slot.title = `${placedCard.name}\n\nDefinition:\n${placedCard.definition}\n\nMnemonic:\n${placedCard.mnemonic}`;
                 
                 slot.innerHTML = `
@@ -1083,7 +1084,7 @@
                 const meta = DOMAINS_META[proc.domain];
                 slot.className = `rounded-md p-1.5 flex flex-col justify-center min-h-[42px] cursor-pointer transition-all border border-emerald-500/30 bg-gradient-to-br from-slate-900 to-emerald-950/30 ring-1 ring-emerald-500/20 text-left`;
                 
-                // Set native alt-text tooltip with name and description (MANDATORY REQUIREMENT)
+                // Set native alt-text tooltip with name and description
                 slot.title = `${proc.name}\n\nDefinition:\n${proc.definition}\n\nMnemonic:\n${proc.mnemonic}`;
                 
                 slot.innerHTML = `
@@ -1145,28 +1146,8 @@
               }
             });
 
-            // Instant On-Hover display details listener (Applies for all 3 modes: Study, Challenge and Ultimate)
-            slot.addEventListener("mouseenter", () => {
-              let displayProc = null;
-              if (gameState.mode === 'ultimate') {
-                const placedId = gameState.ultimatePlacements[proc.id];
-                if (placedId) {
-                  displayProc = PMBOK_DATABASE.find(p => p.id === placedId);
-                }
-              } else {
-                const isPlaced = gameState.placedCardsMap[proc.id];
-                const isHintActive = (gameState.showHintFor === proc.id);
-                const isStudyMode = (gameState.mode === 'study');
-                const revealIdentity = isStudyMode || isHintActive || gameState.showAnswersActive;
-                
-                if (isPlaced || revealIdentity) {
-                  displayProc = proc;
-                }
-              }
-              if (displayProc) {
-                displayDetailedStudyProfile(displayProc);
-              }
-            });
+            // Note: Update to bottom explanation panel is now ONLY triggered on click.
+            // Mouse hover retains the native browser tooltip via the standard 'title' attribute popover.
 
             // Drag over events for seamless drag-n-drop
             slot.addEventListener("dragover", (e) => {
@@ -1204,7 +1185,7 @@
 
       // Gather processes that have NOT been placed correctly
       const filtered = PMBOK_DATABASE.filter(proc => {
-        // Shorthand mapper map filter shorthand to DB domains to prevent case or abbreviation mismatch
+        // Shorthand mapper to match filter buttons (like 'Gov') with domain names (like 'Governance')
         if (filter !== "all") {
           const shorthandMap = {
             'Gov': 'Governance',
@@ -1344,7 +1325,15 @@
     }
 
     // --- STREAMING_CHUNK: Placement and Tap Interaction Resolvers ---
-    // --- HANDLE SLOT CLICKS (Tap-To-Place Support) ---
+    // --- SCROLL TO STUDY PANEL ACTION ---
+    function scrollToStudyPanel() {
+      const section = document.getElementById("study-panel-section");
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // --- HANDLE SLOT CLICKS (Tap-To-Place & Read Info Support) ---
     function handleSlotClick(slotElement) {
       const targetId = slotElement.dataset.id;
       const associatedProcess = PMBOK_DATABASE.find(p => p.id === targetId);
@@ -1352,11 +1341,12 @@
       // 1. Ultimate Mode Interaction
       if (gameState.mode === 'ultimate') {
         if (gameState.ultimatePlacements[targetId]) {
-          // If already has something placed, show details of placed card
+          // If already has something placed, show details of placed card and smooth-scroll
           const actualPlacedId = gameState.ultimatePlacements[targetId];
           const actualPlacedProc = PMBOK_DATABASE.find(p => p.id === actualPlacedId);
           displayDetailedStudyProfile(actualPlacedProc);
           AudioEngine.play('select');
+          scrollToStudyPanel();
           return;
         }
 
@@ -1365,15 +1355,17 @@
         } else {
           displayDetailedStudyProfile(associatedProcess);
           AudioEngine.play('select');
+          scrollToStudyPanel();
         }
         return;
       }
 
       // 2. Study & Challenge Mode Interaction
       if (gameState.placedCardsMap[targetId]) {
-        // If already correct, select and read study profile
+        // If already correct, select, read study profile, and smooth-scroll to bottom panel
         displayDetailedStudyProfile(associatedProcess);
         AudioEngine.play('select');
+        scrollToStudyPanel();
 
         // De-select current deck active selection
         if (gameState.selectedCard) {
@@ -1394,6 +1386,7 @@
       } else {
         displayDetailedStudyProfile(associatedProcess);
         AudioEngine.play('select');
+        scrollToStudyPanel();
       }
     }
 
