@@ -868,6 +868,15 @@
       ultimateSubmitted: false
     };
 
+    // --- SHUFFLE UTILITY FUNCTION ---
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
     // --- STREAMING_CHUNK: Initializing Audio Engine ---
     // --- SYNTHESIZED SOUND EFFECTS ENGINE (Web Audio API) ---
     const AudioEngine = {
@@ -1184,7 +1193,7 @@
       container.innerHTML = "";
 
       // Gather processes that have NOT been placed correctly
-      const filtered = PMBOK_DATABASE.filter(proc => {
+      let filtered = PMBOK_DATABASE.filter(proc => {
         // Shorthand mapper to match filter buttons (like 'Gov') with domain names (like 'Governance')
         if (filter !== "all") {
           const shorthandMap = {
@@ -1208,6 +1217,11 @@
         }
       });
 
+      // Shuffle dynamically if in Challenge or Ultimate mode
+      if (gameState.mode === 'challenge' || gameState.mode === 'ultimate') {
+        filtered = shuffleArray([...filtered]);
+      }
+
       document.getElementById("deck-count").textContent = `${filtered.length} available`;
 
       if (filtered.length === 0) {
@@ -1230,13 +1244,16 @@
         card.className = `p-3 rounded-lg bg-slate-800 border border-slate-700/80 hover:border-emerald-500/40 cursor-grab active:cursor-grabbing hover:bg-slate-750 hover:shadow-lg transition-all flex flex-col gap-1.5 select-none relative group`;
         card.draggable = true;
 
+        // Hide ID references in challenge and ultimate modes to maximize memory difficulty
+        const showId = (gameState.mode === 'study');
+
         // Meta branding on the card top
         card.innerHTML = `
           <div class="flex items-center justify-between pointer-events-none">
             <span class="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${meta.badgeBg}">
               ${meta.code}
             </span>
-            <span class="text-[9px] font-mono text-slate-500 group-hover:text-emerald-400 font-extrabold">${proc.id}</span>
+            ${showId ? `<span class="text-[9px] font-mono text-slate-500 group-hover:text-emerald-400 font-extrabold">${proc.id}</span>` : ''}
           </div>
           <h4 class="text-xs font-black text-slate-200 pointer-events-none leading-tight tracking-wide line-clamp-1">${proc.name}</h4>
           <p class="text-[10px] text-slate-400 pointer-events-none line-clamp-2 leading-relaxed">${proc.definition}</p>
