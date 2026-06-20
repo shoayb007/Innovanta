@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darub — Hassle-free logistics. Pay only for the space you use.</title>
+<meta name="description" content="Darub is the on-demand pallet-sharing trucking platform for SMEs. Book a verified truck in minutes, track it live, and stop paying for empty space.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DARUB — brand tokens (from the refreshed identity)
+============================================================ */
+:root{
+  --ink:#0A0A0B;
+  --ink-panel:#141416;
+  --ink-line:#222226;
+  --paper:#FFFFFF;
+  --bg:#F4F4F5;
+  --red:#E4151B;
+  --red-soft:#FCE9E9;
+  --mute:#8A8A8F;
+  --line-light:#E9E9EC;
+  --ink-2:#55555a;
+  --display:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --body:'Inter', system-ui, -apple-system, sans-serif;
+  --maxw:1120px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.55}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--red);color:#fff}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+
+.eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+  display:inline-block;
+}
+.eyebrow.muted{color:var(--mute)}
+
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:1.05}
+.section-title{font-size:clamp(28px,4.4vw,44px);letter-spacing:-.03em}
+.section-lede{margin-top:16px;font-size:clamp(15px,2vw,18px);color:var(--ink-2);max-width:56ch}
+
+/* ---------- wordmark ---------- */
+.wordmark{font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:1;white-space:nowrap}
+.wordmark .dot{color:var(--red)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--body);font-weight:600;font-size:15px;
+  padding:14px 24px;border-radius:999px;cursor:pointer;border:1px solid transparent;
+  transition:transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+}
+.btn:active{transform:translateY(1px)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#c81117}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:#26262b}
+.btn-ghost-dark{background:transparent;color:#fff;border-color:#34343a}
+.btn-ghost-dark:hover{border-color:#5a5a62;background:#1a1a1d}
+.btn-ghost-light{background:transparent;color:var(--ink);border-color:var(--line-light)}
+.btn-ghost-light:hover{border-color:#c9c9cf;background:var(--bg)}
+.btn-wa{background:#1FAE54;color:#fff}
+.btn-wa:hover{background:#1a9849}
+.btn .arrow{transition:transform .18s ease}
+.btn:hover .arrow{transform:translateX(3px)}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:2px solid var(--red);outline-offset:3px;border-radius:6px;
+}
+
+/* ============================================================
+   NAV
+============================================================ */
+.nav{
+  position:sticky;top:0;z-index:60;background:rgba(10,10,11,.82);
+  backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--ink-line);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
+.nav .wordmark{color:#fff;font-size:23px}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a{font-size:14px;font-weight:500;color:#b8b8be;transition:color .15s}
+.nav-links a:hover{color:#fff}
+.nav-cta{display:flex;align-items:center;gap:12px}
+.nav-cta .btn{padding:10px 18px;font-size:14px}
+.menu-toggle{display:none;background:none;border:0;color:#fff;cursor:pointer}
+@media(max-width:860px){
+  .nav-links{display:none}
+  .menu-toggle{display:inline-flex}
+}
+
+/* ============================================================
+   HERO (ink) + truck animation
+============================================================ */
+.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden;
+  padding:clamp(48px,8vw,88px) 0 clamp(40px,7vw,72px)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(900px 420px at 78% -10%, rgba(228,21,27,.14), transparent 60%)}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,64px);align-items:center}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+
+.hero-badge{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border:1px solid var(--ink-line);
+  border-radius:999px;background:#121214;font-size:12px;color:#dcdce0;font-weight:500}
+.hero-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--red);position:relative}
+.hero-badge .pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--red);
+  animation:ripple 2s ease-out infinite}
+@keyframes ripple{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+
+.hero h1{font-size:clamp(38px,6.4vw,68px);margin-top:22px}
+.hero h1 .accent{color:var(--red)}
+.hero-sub{margin-top:22px;font-size:clamp(16px,2.1vw,19px);color:#a9a9b0;max-width:46ch}
+.hero-actions{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px}
+.hero-proof{margin-top:34px;display:flex;flex-wrap:wrap;gap:26px;padding-top:24px;border-top:1px solid var(--ink-line)}
+.hero-proof .item{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#c7c7cd}
+.hero-proof .item svg{width:18px;height:18px;flex:none;color:var(--red)}
+
+/* --- the route stage (signature) --- */
+.stage{
+  position:relative;border:1px solid var(--ink-line);border-radius:22px;background:#0E0E10;
+  padding:22px;overflow:hidden;
+}
+.stage-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.stage-head .lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.stage-head .live{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#cdcdd2;font-weight:600;
+  background:#161619;border:1px solid var(--ink-line);padding:5px 10px;border-radius:999px}
+.stage-head .live .d{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.route-svg{width:100%;height:auto;display:block;margin:6px 0 2px}
+.route-base{fill:none;stroke:#26262b;stroke-width:3;stroke-linecap:round}
+.route-trail{fill:none;stroke:var(--red);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:760;stroke-dashoffset:760;animation:draw 7s linear infinite}
+@keyframes draw{to{stroke-dashoffset:0}}
+.node{fill:#0E0E10;stroke-width:3}
+.node.a{stroke:#fff}
+.node.b{stroke:var(--red)}
+.node-label{font-family:var(--body);font-size:11px;fill:var(--mute);font-weight:600}
+
+/* truck moving via SMIL animateMotion (#truckMover); this group is just the glyph */
+.truck-chip{transform-box:fill-box;transform-origin:center}
+.truck-chip rect{fill:var(--red)}
+.truck-glyph{fill:#fff}
+
+.stage-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;
+  padding-top:14px;border-top:1px solid var(--ink-line)}
+.stage-foot .cell .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.stage-foot .cell .v{font-size:13.5px;color:#fff;font-weight:600;margin-top:3px;display:flex;align-items:center;gap:7px}
+.stage-foot .cell .v svg{width:14px;height:14px;color:var(--red)}
+
+@media (prefers-reduced-motion: reduce){
+  .route-trail{animation:none;stroke-dashoffset:0}
+  .hero-badge .pulse::after{animation:none}
+  .stage-head .live .d{animation:none}
+}
+
+/* ============================================================
+   MARQUEE / segments strip
+============================================================ */
+.strip{background:var(--ink);color:#fff;border-top:1px solid var(--ink-line);padding:18px 0}
+.strip-inner{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;justify-content:center;
+  font-size:13px;color:#8e8e95;font-weight:500}
+.strip-inner b{color:#fff;font-weight:600}
+.strip-inner .dot{width:4px;height:4px;border-radius:50%;background:var(--red)}
+
+/* ============================================================
+   SECTION scaffolding
+============================================================ */
+.section{padding:clamp(64px,9vw,108px) 0}
+.section.paper{background:var(--paper)}
+.section.bg{background:var(--bg)}
+.section.ink{background:var(--ink);color:#fff}
+.section-head{max-width:720px}
+.section.ink .section-lede{color:#a9a9b0}
+
+/* ---------- how it works ---------- */
+.steps{margin-top:54px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--line-light);border:1px solid var(--line-light);border-radius:20px;overflow:hidden}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+.step{background:var(--paper);padding:30px 26px;position:relative}
+.step .n{font-family:var(--display);font-weight:800;font-size:13px;color:var(--red);letter-spacing:.02em}
+.step .ic{width:40px;height:40px;margin:18px 0 16px;color:var(--ink)}
+.step h3{font-size:18px;letter-spacing:-.01em}
+.step p{margin-top:8px;font-size:14px;color:var(--ink-2);line-height:1.55}
+
+/* ---------- audience cards ---------- */
+.cards{margin-top:54px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:880px){.cards{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line-light);border-radius:20px;padding:30px;
+  display:flex;flex-direction:column;transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(10,10,11,.35);border-color:#dadae0}
+.card .tag{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+.card h3{font-size:21px;margin-top:14px}
+.card p{margin-top:12px;font-size:14.5px;color:var(--ink-2);flex:1}
+.card ul{margin-top:18px;display:flex;flex-direction:column;gap:10px;list-style:none}
+.card li{display:flex;gap:10px;font-size:13.5px;color:var(--ink);align-items:flex-start}
+.card li svg{width:16px;height:16px;color:var(--red);flex:none;margin-top:2px}
+
+/* ---------- pillars (ink) ---------- */
+.pillars{margin-top:54px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:880px){.pillars{grid-template-columns:1fr}}
+.pillar{border:1px solid var(--ink-line);border-radius:20px;padding:30px;background:#101012}
+.pillar .ic{width:38px;height:38px;color:var(--red);margin-bottom:18px}
+.pillar h3{font-size:20px;color:#fff}
+.pillar p{margin-top:10px;font-size:14.5px;color:#a9a9b0}
+
+/* ============================================================
+   WHATSAPP COMPOSER
+============================================================ */
+.compose{background:var(--bg)}
+.compose-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,56px);align-items:center}
+@media(max-width:880px){.compose-grid{grid-template-columns:1fr;gap:32px}}
+.compose .eyebrow{color:#1FAE54}
+.compose-box{background:var(--paper);border:1px solid var(--line-light);border-radius:22px;overflow:hidden;
+  box-shadow:0 24px 60px -40px rgba(10,10,11,.4)}
+.wa-bar{display:flex;align-items:center;gap:12px;background:#075E54;color:#fff;padding:14px 18px}
+.wa-bar .av{width:38px;height:38px;border-radius:50%;background:#0c8074;display:flex;align-items:center;justify-content:center}
+.wa-bar .av svg{width:20px;height:20px;color:#fff}
+.wa-bar .nm{font-weight:600;font-size:14px;line-height:1.2}
+.wa-bar .st{font-size:11px;color:#bfe7e1}
+.wa-body{padding:18px;background:#ECE5DD;background-image:radial-gradient(rgba(0,0,0,.025) 1px,transparent 0);background-size:18px 18px}
+.wa-field{width:100%;border:0;resize:vertical;min-height:168px;border-radius:12px;padding:14px 15px;
+  font-family:var(--body);font-size:14px;line-height:1.6;color:#111;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.wa-actions{display:flex;flex-wrap:wrap;gap:12px;padding:16px 18px;background:var(--paper);border-top:1px solid var(--line-light)}
+.wa-actions .btn{flex:1;min-width:160px}
+.copied{font-size:13px;color:#1FAE54;font-weight:600;display:none;align-items:center;gap:7px;padding:0 18px 16px}
+.copied.show{display:flex}
+
+/* ============================================================
+   CONTACT (ink) + HubSpot form
+============================================================ */
+.contact{background:var(--ink);color:#fff}
+.contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,5vw,64px)}
+@media(max-width:880px){.contact-grid{grid-template-columns:1fr;gap:36px}}
+.contact-info .row{display:flex;gap:14px;align-items:flex-start;margin-top:24px}
+.contact-info .row .ic{width:42px;height:42px;flex:none;border-radius:12px;border:1px solid var(--ink-line);
+  background:#121214;display:flex;align-items:center;justify-content:center}
+.contact-info .row .ic svg{width:19px;height:19px;color:var(--red)}
+.contact-info .row .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.contact-info .row .v{font-size:15.5px;color:#fff;font-weight:500;margin-top:3px}
+.contact-info .row .v:hover{color:var(--red)}
+
+.form{background:#101012;border:1px solid var(--ink-line);border-radius:22px;padding:clamp(24px,3vw,34px)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+.field{margin-top:14px}
+.field:first-child{margin-top:0}
+.field label{display:block;font-size:12px;font-weight:600;letter-spacing:.04em;color:#c7c7cd;margin-bottom:7px}
+.field label .req{color:var(--red)}
+.field input,.field select,.field textarea{
+  width:100%;background:#0A0A0B;border:1px solid var(--ink-line);border-radius:12px;
+  padding:13px 14px;font-family:var(--body);font-size:14.5px;color:#fff;transition:border-color .15s}
+.field textarea{min-height:108px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#5a5a62}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);outline:none}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238A8A8F' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.form .btn{width:100%;margin-top:20px}
+.form-note{margin-top:14px;font-size:12px;color:var(--mute);text-align:center}
+.form-status{margin-top:16px;font-size:14px;font-weight:500;border-radius:12px;padding:13px 15px;display:none}
+.form-status.show{display:block}
+.form-status.ok{background:rgba(31,174,84,.1);border:1px solid rgba(31,174,84,.4);color:#5fe39a}
+.form-status.err{background:rgba(228,21,27,.1);border:1px solid rgba(228,21,27,.4);color:#f08b8f}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer{background:#060607;color:#fff;border-top:1px solid var(--ink-line);padding:56px 0 30px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+@media(max-width:760px){.footer-grid{grid-template-columns:1fr;gap:28px}}
+.footer .wordmark{color:#fff;font-size:26px}
+.footer p.about{margin-top:16px;font-size:13.5px;color:#8e8e95;max-width:34ch}
+.footer h4{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff;font-weight:600;margin-bottom:16px}
+.footer ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.footer ul a{font-size:14px;color:#a9a9b0}
+.footer ul a:hover{color:#fff}
+.footer-bottom{max-width:var(--maxw);margin:40px auto 0;padding:22px clamp(20px,5vw,40px) 0;border-top:1px solid var(--ink-line);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--mute)}
+.footer-bottom .markets{display:flex;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="wordmark" aria-label="Darub home">Darub<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#who">Who it's for</a>
+      <a href="#why">Why Darub</a>
+      <a href="#whatsapp">WhatsApp</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-wa" href="https://wa.me/23059473388" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.38a9.86 9.86 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2Zm0 18.07h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.1.81.83-3.02-.2-.31a8.16 8.16 0 0 1-1.25-4.35c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.13-.56.12-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43-.14 0-.31-.01-.47-.01a.9.9 0 0 0-.65.31c-.22.25-.85.84-.85 2.05 0 1.2.88 2.37 1 2.53.12.16 1.73 2.64 4.19 3.7.58.26 1.04.4 1.4.51.59.19 1.12.16 1.54.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+        Chat
+      </a>
+      <a class="btn btn-red" href="#contact">Get started</a>
+    </div>
+    <button class="menu-toggle" onclick="document.getElementById('contact').scrollIntoView()" aria-label="Open contact">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-badge"><span class="pulse"></span> On-demand pallet logistics</span>
+      <h1>Move your goods.<br><span class="accent">Pay only for</span> the space you use.</h1>
+      <p class="hero-sub">Stop chasing brokers and paying for half-empty trucks. Darub matches your load with a verified truck in minutes — and you track it live, every kilometre, to the door.</p>
+      <div class="hero-actions">
+        <a class="btn btn-red" href="#contact">Book a trial trip <svg class="arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost-dark" href="#how">See how it works</a>
+      </div>
+      <div class="hero-proof">
+        <span class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg> Verified, rated truckers</span>
+        <span class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Booked in 2 minutes</span>
+        <span class="item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg> Live tracking to the door</span>
+      </div>
+    </div>
+
+    <!-- SIGNATURE: route ribbon with moving truck -->
+    <div class="stage" aria-label="A truck moving live along its delivery route">
+      <div class="stage-head">
+        <span class="lbl">Live route</span>
+        <span class="live"><span class="d"></span> Tracking</span>
+      </div>
+
+      <svg class="route-svg" viewBox="0 0 520 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Delivery route from pickup to drop-off">
+        <!-- the path geometry (shared) -->
+        <path id="routePath" class="route-base"
+              d="M44,200 C150,70 250,60 300,140 C340,205 430,200 480,84"/>
+        <path class="route-trail"
+              d="M44,200 C150,70 250,60 300,140 C340,205 430,200 480,84"/>
+
+        <!-- pickup node -->
+        <circle class="node a" cx="44" cy="200" r="7"/>
+        <text class="node-label" x="44" y="226" text-anchor="middle">Pickup</text>
+        <!-- drop-off node -->
+        <circle class="node b" cx="480" cy="84" r="7"/>
+        <text class="node-label" x="480" y="64" text-anchor="middle">Drop-off</text>
+
+        <!-- moving truck -->
+        <g class="truck-chip">
+          <rect x="-17" y="-12" width="34" height="24" rx="8"/>
+          <g class="truck-glyph" transform="translate(-10 -7) scale(0.72)">
+            <path d="M0 3h14v9H0z"/>
+            <path d="M14 6h5l4 4v2h-9z"/>
+            <circle cx="5" cy="14" r="2.4" fill="#E4151B"/>
+            <circle cx="18" cy="14" r="2.4" fill="#E4151B"/>
+          </g>
+          <animateMotion id="truckMover" dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+            <mpath href="#routePath"/>
+          </animateMotion>
+        </g>
+      </svg>
+
+      <div class="stage-foot">
+        <div class="cell">
+          <div class="k">Status</div>
+          <div class="v"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> In transit · on time</div>
+        </div>
+        <div class="cell">
+          <div class="k">Proof of delivery</div>
+          <div class="v"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg> Digital, signed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== STRIP ===================== -->
+<div class="strip">
+  <div class="wrap strip-inner">
+    <span>Built for <b>SMEs, brokers &amp; fleet owners</b></span><span class="dot"></span>
+    <span><b>Agriculture</b></span><span class="dot"></span>
+    <span><b>Retail &amp; supermarkets</b></span><span class="dot"></span>
+    <span><b>Manufacturing</b></span><span class="dot"></span>
+    <span><b>Importers &amp; wholesalers</b></span>
+  </div>
+</div>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="section paper" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2 class="section-title" style="margin-top:14px">Four steps. No phone tag.</h2>
+      <p class="section-lede">From posting a load to signed delivery, the whole journey happens in one place — so nothing gets lost in a WhatsApp group.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16v12H4z"/><path d="M4 7l2-3h12l2 3"/><path d="M9 12h6"/></svg>
+        <h3>Post your load</h3>
+        <p>Tell us the route, what you're moving and when. It takes about two minutes.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+        <h3>Get matched</h3>
+        <p>A nearby verified trucker accepts. You see their name, rating and a confirmed pickup.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <h3>Track it live</h3>
+        <p>Watch the trip move in real time. No more "where's my truck?" calls.</p>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13l4 4L20 5"/><path d="M4 19h16"/></svg>
+        <h3>Delivered &amp; signed</h3>
+        <p>Digital proof of delivery the moment it lands. Everyone has the same record.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHO IT'S FOR ===================== -->
+<section class="section bg" id="who">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Who it's for</span>
+      <h2 class="section-title" style="margin-top:14px">One platform. Every side of the load.</h2>
+      <p class="section-lede">Whether you send goods, receive them, or drive them — Darub is built to take the friction out of your day.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Shippers &amp; manufacturers</span>
+        <h3>Ship faster, deliver reliably</h3>
+        <p>Secure a truck quickly when you need one, keep customers updated with live tracking, and stop scrambling at the last minute.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Trucks when you need them — not "maybe tomorrow"</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Fewer coordination calls, more visibility</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> On-time delivery your customers can see</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Retailers &amp; distributors</span>
+        <h3>Keep your shelves stocked</h3>
+        <p>Move stock from supplier to store, or store to store, the moment it gets urgent — and know exactly when it will arrive.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Fast trucks when urgency hits</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Tracking that ends the chasing</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Fewer late deliveries and empty shelves</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Carriers &amp; fleet owners</span>
+        <h3>Stop running empty</h3>
+        <p>Fill your unused space and turn dead kilometres into paid trips. Loads come to you based on where you are and what you run.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> More paid kilometres per truck</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Steady jobs without chasing customers</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4L19 6"/></svg> Accept loads from your phone in seconds</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY DARUB ===================== -->
+<section class="section ink" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why Darub</span>
+      <h2 class="section-title" style="margin-top:14px">The opposite of the broker call.</h2>
+      <p class="section-lede">We replace the calls, the paperwork and the guesswork with three things you can count on.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        <h3>Hassle-free</h3>
+        <p>Book in two minutes, get a real human on WhatsApp when you need one, and never assemble a load over a dozen phone calls again.</p>
+      </div>
+      <div class="pillar">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <h3>Transparent</h3>
+        <p>You see a confirmed truck before anything is agreed. No surge games, no mystery markups, no surprises at the end.</p>
+      </div>
+      <div class="pillar">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3>Reliable</h3>
+        <p>Every trucker is verified and rated. Every shipment is tracked. Every delivery is confirmed with digital proof.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHATSAPP COMPOSER ===================== -->
+<section class="section compose" id="whatsapp">
+  <div class="wrap compose-grid">
+    <div class="section-head">
+      <span class="eyebrow">Start on WhatsApp</span>
+      <h2 class="section-title" style="margin-top:14px">Tell us your trip. We'll take it from there.</h2>
+      <p class="section-lede">Edit the message below with your pickup, drop-off and load. Copy it, or send it straight to our concierge — whichever's easier.</p>
+    </div>
+
+    <div class="compose-box">
+      <div class="wa-bar">
+        <div class="av">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.38a9.86 9.86 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2Z"/></svg>
+        </div>
+        <div>
+          <div class="nm">Darub Concierge</div>
+          <div class="st">Typically replies in minutes</div>
+        </div>
+      </div>
+      <div class="wa-body">
+        <label for="waMsg" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Your WhatsApp message</label>
+        <textarea id="waMsg" class="wa-field" spellcheck="true"></textarea>
+      </div>
+      <div class="wa-actions">
+        <button class="btn btn-ghost-light" type="button" id="copyBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          Copy message
+        </button>
+        <a class="btn btn-wa" id="waSend" href="https://wa.me/23059473388" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.38a9.86 9.86 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2Z"/></svg>
+          Open WhatsApp
+        </a>
+      </div>
+      <div class="copied" id="copied">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l4 4L19 6"/></svg>
+        Copied — paste it into WhatsApp.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT (HubSpot) ===================== -->
+<section class="section contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <span class="eyebrow">Contact us</span>
+      <h2 class="section-title" style="margin-top:14px">Let's move<br>your first load.</h2>
+      <p class="section-lede" style="color:#a9a9b0">Tell us a little about your business. We'll be in touch to set up a free trial trip — no commitment.</p>
+
+      <div class="row">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+        <div><div class="k">Email</div><a class="v" href="mailto:info@darub.net">info@darub.net</a></div>
+      </div>
+      <div class="row">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></div>
+        <div><div class="k">Phone</div><a class="v" href="tel:+23059473388">+230 5947 3388</a></div>
+      </div>
+      <div class="row">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+        <div><div class="k">Location</div><div class="v">Port-Louis, Mauritius</div></div>
+      </div>
+      <div class="row">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.38a9.86 9.86 0 0 0 4.73 1.2h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2Z"/></svg></div>
+        <div><div class="k">WhatsApp</div><a class="v" href="https://wa.me/23059473388" target="_blank" rel="noopener">Message the concierge</a></div>
+      </div>
+    </div>
+
+    <!-- HubSpot-connected form -->
+    <form class="form" id="contactForm" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="firstname">First name <span class="req">*</span></label>
+          <input id="firstname" name="firstname" type="text" autocomplete="given-name" placeholder="Reza" required>
+        </div>
+        <div class="field">
+          <label for="lastname">Last name</label>
+          <input id="lastname" name="lastname" type="text" autocomplete="family-name" placeholder="Patel">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="email">Work email <span class="req">*</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+230 5xxx xxxx">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="company">Company</label>
+          <input id="company" name="company" type="text" autocomplete="organization" placeholder="Your business">
+        </div>
+        <div class="field">
+          <label for="role">I am a…</label>
+          <select id="role" name="i_am_a">
+            <option value="">Select one</option>
+            <option value="Shipper / Manufacturer">Shipper / manufacturer</option>
+            <option value="Retailer / Distributor">Retailer / distributor</option>
+            <option value="Carrier / Fleet owner">Carrier / fleet owner</option>
+            <option value="Broker">Broker</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="message">What do you need to move?</label>
+        <textarea id="message" name="message" placeholder="Route, load type, and roughly how often you ship."></textarea>
+      </div>
+
+      <button class="btn btn-red" type="submit" id="submitBtn">
+        Request a trial trip
+        <svg class="arrow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="form-note">By submitting, you agree to be contacted by the Darub team. No spam, ever.</p>
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div>
+      <div class="wordmark">Darub<span class="dot">.</span></div>
+      <p class="about">Hassle-free, on-demand logistics for SMEs. Book a verified truck, pay only for the space you use, and track it to the door.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#who">Who it's for</a></li>
+        <li><a href="#why">Why Darub</a></li>
+        <li><a href="#whatsapp">Start on WhatsApp</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:info@darub.net">info@darub.net</a></li>
+        <li><a href="tel:+23059473388">+230 5947 3388</a></li>
+        <li><a href="https://wa.me/23059473388" target="_blank" rel="noopener">WhatsApp concierge</a></li>
+        <li><a>Port-Louis, Mauritius</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="yr"></span> Darub. All rights reserved.</span>
+    <span class="markets">Mauritius · United Arab Emirates · Africa</span>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   1) WHATSAPP COMPOSER
+============================================================ */
+const WA_NUMBER = "23059473388"; // +230 5947 3388, digits only
+
+const defaultMsg =
+`Hi Darub 👋 I'd like to move some goods.
+
+• Pickup: 
+• Drop-off: 
+• What I'm shipping: 
+• When I need it: 
+
+Please let me know the next steps. Thanks!`;
+
+const waMsg  = document.getElementById('waMsg');
+const waSend = document.getElementById('waSend');
+const copyBtn= document.getElementById('copyBtn');
+const copied = document.getElementById('copied');
+
+waMsg.value = defaultMsg;
+
+function refreshWaLink(){
+  waSend.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waMsg.value)}`;
+}
+refreshWaLink();
+waMsg.addEventListener('input', refreshWaLink);
+
+copyBtn.addEventListener('click', async () => {
+  try{
+    await navigator.clipboard.writeText(waMsg.value);
+  }catch(e){
+    waMsg.select(); document.execCommand('copy'); // fallback
+  }
+  copied.classList.add('show');
+  setTimeout(()=>copied.classList.remove('show'), 2600);
+});
+
+/* ============================================================
+   2) HUBSPOT CONTACT FORM
+   --------------------------------------------------------
+   Fill in your HubSpot Portal ID and Form GUID below.
+   Find them in HubSpot → Marketing → Forms → (your form) →
+   Share → Embed code, or via the form's API details.
+   Until they're set, the form simply tells the user to email us.
+============================================================ */
+const HUBSPOT_PORTAL_ID = "YOUR_PORTAL_ID";   // e.g. "21345678"
+const HUBSPOT_FORM_GUID = "YOUR_FORM_GUID";   // e.g. "a1b2c3d4-...."
+
+const form = document.getElementById('contactForm');
+const statusEl = document.getElementById('formStatus');
+const submitBtn = document.getElementById('submitBtn');
+
+function showStatus(type, msg){
+  statusEl.textContent = msg;
+  statusEl.className = `form-status show ${type}`;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  statusEl.className = 'form-status';
+
+  const firstname = form.firstname.value.trim();
+  const email = form.email.value.trim();
+
+  if(!firstname || !email){
+    showStatus('err', 'Please add your first name and a valid email so we can reach you.');
+    return;
+  }
+
+  // If HubSpot isn't configured yet, fail gracefully.
+  if(HUBSPOT_PORTAL_ID === "YOUR_PORTAL_ID" || HUBSPOT_FORM_GUID === "YOUR_FORM_GUID"){
+    showStatus('err', 'Form isn\u2019t connected yet. Meanwhile, email us at info@darub.net and we\u2019ll set up your trial trip.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  const original = submitBtn.innerHTML;
+  submitBtn.textContent = 'Sending…';
+
+  // HubSpot Forms Submission API payload
+  const fields = [
+    { name: "firstname", value: firstname },
+    { name: "lastname",  value: form.lastname.value.trim() },
+    { name: "email",     value: email },
+    { name: "phone",     value: form.phone.value.trim() },
+    { name: "company",   value: form.company.value.trim() },
+    { name: "i_am_a",    value: form.i_am_a.value },        // create this contact property in HubSpot
+    { name: "message",   value: form.message.value.trim() }
+  ].filter(f => f.value); // HubSpot rejects empty values for some fields
+
+  const payload = {
+    fields,
+    context: {
+      pageUri: window.location.href,
+      pageName: document.title
+    }
+  };
+
+  const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_GUID}`;
+
+  try{
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if(res.ok){
+      form.reset();
+      showStatus('ok', 'Thanks — we\u2019ve got your details. The Darub team will be in touch shortly to set up your trial trip.');
+    }else{
+      const data = await res.json().catch(()=>({}));
+      const detail = data.errors?.[0]?.message || 'Something went wrong submitting the form.';
+      showStatus('err', `${detail} You can also email us at info@darub.net.`);
+    }
+  }catch(err){
+    showStatus('err', 'We couldn\u2019t reach the server. Please email info@darub.net or message us on WhatsApp.');
+  }finally{
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = original;
+  }
+});
+
+/* ============================================================
+   3) MISC — reduced motion + year
+============================================================ */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const svg = document.querySelector('.route-svg');
+  if(svg && svg.pauseAnimations){ svg.pauseAnimations(); }
+}
+</script>
+</body>
+</html>
