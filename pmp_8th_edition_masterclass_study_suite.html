@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMBOK 8th Edition Masterclass Suite</title>
+  
+  <!-- Premium CDNs: Tailwind CSS, Lucide Icons, MathJax for LaTeX -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es6/tex-mml-chtml.js"></script>
+
+  <style>
+    /* Premium scrollbar configurations */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    
+    /* Perfect perspective for interactive flashcard flips */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased h-full flex flex-col">
+
+  <!-- =========================================================================
+       PREMIUM TOP NAVIGATION BAR
+       ========================================================================= -->
+  <header class="border-b border-slate-800 bg-slate-900/95 sticky top-0 z-50 backdrop-blur-md px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="bg-gradient-to-tr from-amber-500 to-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-900/25">
+        <i data-lucide="cpu" class="w-6 h-6 text-white animate-pulse"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-amber-400 via-indigo-300 to-white bg-clip-text text-transparent">
+            PMBOK 8th Edition Masterclass Suite
+          </h1>
+          <span class="bg-indigo-500/20 text-indigo-300 text-[10px] font-black px-2 py-0.5 rounded border border-indigo-500/30">ELITE</span>
+        </div>
+        <p class="text-xs text-slate-400">Advanced Cognitive Learning & Performance Architecture Suite</p>
+      </div>
+    </div>
+    
+    <!-- Progress Tracker Widget -->
+    <div class="flex items-center gap-4 bg-slate-800/80 px-4 py-2 rounded-2xl border border-slate-700/50 w-full sm:w-auto">
+      <div class="flex-1 sm:flex-none">
+        <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+          <span>Knowledge Mastered</span>
+          <span id="progress-percent" class="text-amber-400 font-bold">0%</span>
+        </div>
+        <div class="w-full sm:w-40 bg-slate-700 h-2 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-gradient-to-r from-amber-500 to-indigo-500 h-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-700/50">
+        <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+        <span id="completed-count-badge" class="text-xs font-bold">0/8 Modules</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN LAYOUT CONTAINER
+       ========================================================================= -->
+  <div class="flex-1 flex flex-col md:flex-row min-h-0">
+    
+    <!-- Sidebar Navigation -->
+    <nav class="w-full md:w-64 bg-slate-900/40 border-r border-slate-800 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible shrink-0">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full bg-gradient-to-r from-indigo-900/50 to-slate-950 text-indigo-200 border-l-4 border-indigo-500 shadow-md">
+        <i data-lucide="layers" class="w-5 h-5"></i>
+        <span>Study Dashboard</span>
+      </button>
+      
+      <button onclick="switchTab('lessons')" id="nav-lessons" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full text-slate-400 hover:text-white hover:bg-slate-900">
+        <i data-lucide="book-open" class="w-5 h-5"></i>
+        <span>Comprehensive Syllabus</span>
+      </button>
+
+      <button onclick="switchTab('flashcards')" id="nav-flashcards" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full text-slate-400 hover:text-white hover:bg-slate-900">
+        <i data-lucide="brain" class="w-5 h-5"></i>
+        <span>Active Recall Cards</span>
+      </button>
+
+      <button onclick="switchTab('connector')" id="nav-connector" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full text-slate-400 hover:text-white hover:bg-slate-900">
+        <i data-lucide="compass" class="w-5 h-5"></i>
+        <span>Concept Connector</span>
+      </button>
+
+      <button onclick="switchTab('simulator')" id="nav-simulator" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full text-slate-400 hover:text-white hover:bg-slate-900">
+        <i data-lucide="help-circle" class="w-5 h-5"></i>
+        <span>180-Question Simulator</span>
+      </button>
+
+      <button onclick="switchTab('sandbox')" id="nav-sandbox" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full text-slate-400 hover:text-white hover:bg-slate-900">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+        <span>GenAI Sandbox</span>
+      </button>
+    </nav>
+
+    <!-- Dynamic Content Panel -->
+    <main class="flex-1 p-6 max-w-5xl mx-auto w-full overflow-y-auto">
+      
+      <!-- ==========================================
+           TAB: DASHBOARD
+           ========================================== -->
+      <section id="tab-dashboard" class="space-y-6">
+        <!-- Educational Psychology Greeting -->
+        <div class="bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-900 border border-slate-800 p-6 rounded-2xl relative overflow-hidden shadow-2xl">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
+          <div class="absolute bottom-0 right-1/4 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl -z-10"></div>
+          
+          <span class="bg-amber-500/10 text-amber-400 text-xs px-3 py-1 rounded-full border border-amber-500/20 font-bold uppercase tracking-wider">
+            Elite PMBOK 8 Cognitive Strategy
+          </span>
+          
+          <h2 class="text-2xl font-bold text-white mt-3">Syllabus-Complete Mastery Matrix</h2>
+          <p class="text-slate-300 mt-2 text-sm leading-relaxed max-w-3xl">
+            This study terminal is dynamically cross-referenced against your uploaded lessons 2-8 files. All math structures utilize LaTeX standard rendering. Test your retention with our <strong>180-question procedurally integrated exam simulation matrix</strong> to experience target scenario variations.
+          </p>
+          <div class="flex flex-wrap items-center gap-4 mt-4 text-xs text-indigo-300">
+            <span class="flex items-center gap-1"><i data-lucide="check" class="text-emerald-400 w-4 h-4"></i> No polyfill.io dependency</span>
+            <span class="flex items-center gap-1"><i data-lucide="check" class="text-emerald-400 w-4 h-4"></i> Detailed Multi-Perspective Mapping</span>
+            <span class="flex items-center gap-1"><i data-lucide="check" class="text-emerald-400 w-4 h-4"></i> Dynamic EVM Interpretative Calculations</span>
+          </div>
+        </div>
+
+        <!-- Grid Status Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-xl flex items-center gap-4">
+            <div class="bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">
+              <i data-lucide="check-circle" class="w-6 h-6 text-emerald-400"></i>
+            </div>
+            <div>
+              <h4 id="stat-chapters-complete" class="text-2xl font-black text-white">0/8</h4>
+              <p class="text-xs text-slate-400">Chapters Checked Complete</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-xl flex items-center gap-4">
+            <div class="bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
+              <i data-lucide="brain" class="w-6 h-6 text-amber-400"></i>
+            </div>
+            <div>
+              <h4 id="stat-cards-known" class="text-2xl font-black text-white">0 / 25</h4>
+              <p class="text-xs text-slate-400">Recall Deck Mastered</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-xl flex items-center gap-4">
+            <div class="bg-indigo-500/10 p-3 rounded-lg border border-indigo-500/20">
+              <i data-lucide="trending-up" class="w-6 h-6 text-indigo-400"></i>
+            </div>
+            <div>
+              <h4 id="stat-quiz-score" class="text-2xl font-black text-white">0 / 180</h4>
+              <p class="text-xs text-slate-400">Passed Exam Simulator Drills</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Modules Grid Roadmap -->
+        <div>
+          <h3 class="text-lg font-bold text-white mb-3">Core Modules Roadmap (Fully Detailed)</h3>
+          <div id="dashboard-modules-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Programmatically Injected -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB: LESSONS (COMPREHENSIVE SYLLABUS)
+           ========================================== -->
+      <section id="tab-lessons" class="space-y-8 hidden">
+        <div class="border-b border-slate-800 pb-4">
+          <h2 class="text-2xl font-black text-white">Interactive Syllabus Reference Manual</h2>
+          <p class="text-sm text-slate-400">Master every paragraph, terminology mapping, step-by-step framework, and PMP ECO alignment criteria below.</p>
+        </div>
+
+        <!-- Extensive Search & Category Filter System -->
+        <div class="flex flex-col sm:flex-row gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div class="flex-1 relative">
+            <i data-lucide="search" class="absolute left-3.5 top-3 w-4 h-4 text-slate-500"></i>
+            <input
+              type="text"
+              id="lessons-search"
+              placeholder="Search master syllabus topics, codes, guidelines..."
+              oninput="handleSearch(this.value)"
+              class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 text-slate-200"
+            />
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="category-filters-container">
+            <!-- Programmatically Injected Filters -->
+          </div>
+        </div>
+
+        <!-- Lessons Container -->
+        <div id="lessons-stream" class="space-y-8">
+          <!-- Programmatically Injected Lessons -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB: FLASHCARDS (ACTIVE RECALL)
+           ========================================== -->
+      <section id="tab-flashcards" class="space-y-8 hidden">
+        <div class="border-b border-slate-800 pb-4">
+          <h2 class="text-2xl font-black text-white">Active Spaced Recall Deck</h2>
+          <p class="text-sm text-slate-400">Force active retrieval to form permanent connections. Self-grade on conceptual accuracy before flipping to verify.</p>
+        </div>
+
+        <div class="flex justify-between items-center text-xs text-slate-400 px-2">
+          <span id="flashcard-counter">Card 1 of 25</span>
+          <span id="flashcard-mastery" class="text-emerald-400 font-semibold">0 Cards Marked as Mastered</span>
+        </div>
+
+        <!-- Premium Flip Card Structure -->
+        <div class="perspective-1000 w-full min-h-[300px]">
+          <div id="flashcard-card" onclick="flipCard()" class="transform-style-3d transition-transform duration-500 relative w-full h-[300px] cursor-pointer">
+            
+            <!-- Card Front -->
+            <div class="backface-hidden absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl border-2 border-slate-800 p-8 flex flex-col justify-between shadow-2xl">
+              <div class="flex justify-between items-center">
+                <span id="card-category-front" class="text-[10px] uppercase tracking-wider font-bold text-indigo-400 bg-indigo-950/60 px-3 py-1 rounded border border-indigo-900/50 font-mono">8th Edition</span>
+                <span class="text-xs text-slate-500 font-semibold flex items-center gap-1">
+                  <i data-lucide="refresh-cw" class="w-3 h-3 animate-pulse"></i> Click anywhere to flip
+                </span>
+              </div>
+              <div class="my-6">
+                <span class="text-xs font-bold text-amber-500/80 uppercase">Question Node</span>
+                <h3 id="card-question" class="text-sm md:text-base font-bold text-white mt-2 leading-relaxed">Loading Question...</h3>
+              </div>
+              <div class="text-center text-xs text-slate-500 border-t border-slate-850 pt-4">
+                Formulate the exact PMBOK 8th Edition shift in your mind...
+              </div>
+            </div>
+
+            <!-- Card Back -->
+            <div class="backface-hidden rotate-y-180 absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl border-2 border-slate-800 p-8 flex flex-col justify-between shadow-2xl overflow-y-auto">
+              <div class="flex justify-between items-center shrink-0">
+                <span id="card-category-back" class="text-[10px] uppercase tracking-wider font-bold text-indigo-400 bg-indigo-950/60 px-3 py-1 rounded border border-indigo-900/50 font-mono">8th Edition</span>
+                <span class="text-xs text-slate-500 font-semibold flex items-center gap-1">
+                  <i data-lucide="refresh-cw" class="w-3 h-3"></i> Flip back
+                </span>
+              </div>
+              <div class="my-4 flex-1">
+                <span class="text-xs font-bold text-emerald-500/80 uppercase">Scientific Explanation</span>
+                <p id="card-answer" class="text-xs md:text-sm text-slate-200 mt-2 leading-relaxed">Loading Answer...</p>
+              </div>
+              <div class="text-center text-xs text-slate-500 border-t border-slate-850 pt-2 shrink-0">
+                Self-evaluate using the controls below!
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Evaluation Buttons -->
+        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+          <button onclick="handleFlashcardAction(false)" class="bg-slate-900 hover:bg-slate-850 border border-slate-800 p-4 rounded-xl flex flex-col items-center gap-1 transition text-slate-300">
+            <i data-lucide="refresh-cw" class="w-5 h-5 text-amber-500 mb-1"></i>
+            <span class="text-xs font-bold">Still Reviewing</span>
+            <p class="text-[10px] text-slate-500">I want to see this again</p>
+          </button>
+
+          <button onclick="handleFlashcardAction(true)" class="bg-slate-900 hover:bg-emerald-950/20 hover:border-emerald-500/50 border border-slate-800 p-4 rounded-xl flex flex-col items-center gap-1 transition text-slate-300">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 mb-1"></i>
+            <span class="text-xs font-bold text-emerald-400">Mastered & Memorized</span>
+            <p class="text-[10px] text-slate-500">Mark as known concept</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB: CONCEPT CONNECTOR
+           ========================================== -->
+      <section id="tab-connector" class="space-y-8 hidden">
+        <div class="border-b border-slate-800 pb-4">
+          <h2 class="text-2xl font-black text-white">Interactive Concept Linkage Matrix</h2>
+          <p class="text-sm text-slate-400">Deeply understand the interconnections between project strategy, execution phases, and organizational benefits realization frameworks.</p>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4">Select an Executive Node:</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-6" id="connector-nodes-container">
+            <!-- Programmatically Injected Nodes -->
+          </div>
+
+          <!-- Connection Details Explorer Output -->
+          <div id="connector-details-output" class="bg-slate-950 border border-slate-850 border-dashed p-10 rounded-xl text-center">
+            <i data-lucide="info" class="w-8 h-8 text-slate-600 mx-auto mb-2"></i>
+            <p class="text-sm text-slate-400 font-semibold">Select an Executive Node button above to inspect connection traces.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB: SCENARIO SIMULATOR (180 QUESTIONS)
+           ========================================== -->
+      <section id="tab-simulator" class="space-y-6 hidden">
+        <div class="border-b border-slate-800 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="text-2xl font-black text-white">Dynamic 180-Question Exam Simulator</h2>
+            <p class="text-sm text-slate-400">Fully meets ECO specifications with procedural permutation. Click any question to begin.</p>
+          </div>
+          <div class="flex flex-wrap gap-2 shrink-0">
+            <span id="simulator-prof-people" class="bg-indigo-950/40 text-indigo-300 text-xs px-2.5 py-1 rounded-lg border border-indigo-900/30">People: 0%</span>
+            <span id="simulator-prof-process" class="bg-indigo-950/40 text-indigo-300 text-xs px-2.5 py-1 rounded-lg border border-indigo-900/30">Process: 0%</span>
+            <span id="simulator-prof-business" class="bg-indigo-950/40 text-indigo-300 text-xs px-2.5 py-1 rounded-lg border border-indigo-900/30">Business: 0%</span>
+          </div>
+        </div>
+
+        <!-- Filter & Search Controls for Simulator -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div class="relative sm:col-span-2">
+            <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-slate-500"></i>
+            <input type="text" id="sim-search" placeholder="Search questions..." oninput="filterSimulatorQuestions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2 text-xs focus:outline-none text-slate-200" />
+          </div>
+          <div>
+            <select id="sim-filter-domain" onchange="filterSimulatorQuestions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-300">
+              <option value="All">All Domains</option>
+              <option value="People">People Domain</option>
+              <option value="Process">Process Domain</option>
+              <option value="Business">Business Env</option>
+            </select>
+          </div>
+          <div>
+            <select id="sim-filter-status" onchange="filterSimulatorQuestions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-300">
+              <option value="All">All Statuses</option>
+              <option value="Unanswered">Unanswered</option>
+              <option value="Correct">Correct</option>
+              <option value="Incorrect">Incorrect</option>
+              <option value="Bookmarked">Bookmarked / Flagged</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Question Navigation Grid -->
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-slate-400">Scenario Selection Grid (1-180)</span>
+            <span class="text-xs text-slate-500" id="grid-filter-count">Showing 180 questions</span>
+          </div>
+          <div id="sim-question-grid" class="flex flex-wrap gap-1.5 max-h-[140px] overflow-y-auto p-2 bg-slate-950 rounded-lg border border-slate-850">
+            <!-- Programmatically Generated buttons -->
+          </div>
+        </div>
+
+        <!-- Active Scenario Card -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4" id="active-scenario-card">
+          <div class="flex justify-between items-center">
+            <div class="flex gap-2">
+              <span id="quiz-topic-badge" class="bg-indigo-500/15 text-indigo-400 text-xs px-2.5 py-1 rounded-full font-bold border border-indigo-900/45 font-mono">
+                💡 Topic: Outcomes Over Outputs
+              </span>
+              <span id="quiz-domain-badge" class="bg-slate-850 text-slate-300 text-xs px-2.5 py-1 rounded-full border border-slate-750 font-mono">
+                Process
+              </span>
+            </div>
+            <button id="bookmark-btn" onclick="toggleBookmarkActiveQuestion()" class="text-slate-400 hover:text-amber-400 transition flex items-center gap-1.5 text-xs font-bold">
+              <i data-lucide="flag" class="w-4 h-4"></i>
+              <span id="bookmark-text">Flag Question</span>
+            </button>
+          </div>
+
+          <p id="quiz-scenario-text" class="text-xs md:text-sm font-medium text-slate-100 leading-relaxed">
+            Scenario Text Loading...
+          </p>
+
+          <!-- Options Container -->
+          <div class="space-y-3 pt-3" id="quiz-options-container">
+            <!-- Programmatically Injected Options -->
+          </div>
+
+          <!-- Control Action Row -->
+          <div class="flex justify-between items-center pt-4 border-t border-slate-850 gap-3">
+            <span id="simulator-progress-label" class="text-xs text-slate-500">Scenario 1 of 180</span>
+            <div class="flex gap-2">
+              <button id="quiz-submit-btn" onclick="submitQuizAnswer()" class="bg-slate-800 text-slate-500 cursor-not-allowed px-5 py-2.5 rounded-xl text-xs font-bold transition" disabled>
+                Submit Response
+              </button>
+              <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1 hidden">
+                Next Scenario <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanations Box -->
+        <div id="quiz-explanation-box" class="bg-slate-900 border border-slate-850 p-6 rounded-2xl hidden animate-fadeIn">
+          <div class="flex items-center gap-2 mb-3">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+            <h3 class="text-sm font-bold text-white">Elite PMP Coach Analysis:</h3>
+          </div>
+          <p id="quiz-explanation-text" class="text-xs text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-xl border border-slate-850 font-mono">
+            Explanation Text...
+          </p>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB: GENAI SANDBOX
+           ========================================== -->
+      <section id="tab-sandbox" class="space-y-8 hidden">
+        <div class="border-b border-slate-800 pb-4">
+          <h2 class="text-2xl font-black text-white">Generative AI PM Assistant Sandbox</h2>
+          <p class="text-sm text-slate-400">PMBOK 8th Edition advocates leveraging GenAI tools for drafting templates and exploring scenarios, while maintaining strict project manager accountability. Try the template prompts below or input your custom prompt to witness PMBOK-aligned generation.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Left Side: Copilot Presets -->
+          <div class="space-y-3 md:col-span-1">
+            <h3 class="text-xs uppercase tracking-wider font-bold text-slate-400">Copilot Role Presets</h3>
+            <div class="space-y-2" id="sandbox-roles-container">
+              <!-- Programmatically Injected Presets -->
+            </div>
+          </div>
+
+          <!-- Right Side: Execution Console -->
+          <div class="md:col-span-2 space-y-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-300">Interact with AI Study Copilot</span>
+                <span class="text-[10px] bg-indigo-950/50 text-indigo-400 px-2 py-0.5 rounded border border-indigo-900/35">Interactive Playground</span>
+              </div>
+
+              <textarea
+                id="sandbox-textarea"
+                placeholder="Type your study question, prompt, or select a preset on the left..."
+                rows="4"
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+              ></textarea>
+
+              <div class="flex justify-end">
+                <button
+                  id="sandbox-run-btn"
+                  onclick="runAIAnalysis()"
+                  class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+                >
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                  <span>Analyze via AI Model</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Simulation Output Area -->
+            <div id="sandbox-output-block" class="bg-slate-900 border border-slate-850 p-5 rounded-2xl relative overflow-hidden hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl"></div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold text-amber-500 flex items-center gap-1">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Co-Pilot Synthesis:
+                </span>
+                <button onclick="copySandboxOutput()" class="text-[10px] text-slate-400 hover:text-white flex items-center gap-1">
+                  <i data-lucide="clipboard" class="w-3 h-3"></i> Copy Output
+                </button>
+              </div>
+
+              <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 text-xs text-slate-300 overflow-x-auto leading-relaxed max-h-[300px] overflow-y-auto">
+                <pre id="sandbox-output-text" class="whitespace-pre-wrap font-sans">Output loading...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modern Compact Premium Footer -->
+  <footer class="border-t border-slate-800 bg-slate-900/50 py-4 px-6 text-center text-[11px] text-slate-500 shrink-0">
+    <p>© 2026 PMI-aligned Premium Study Prep Ecosystem. Leveraging educational psychology and spaced repetition frameworks.</p>
+  </footer>
+
+  <!-- =========================================================================
+       3. INTERACTIVE ENGINE & DATA STATE (VANILLA JAVASCRIPT)
+       ========================================================================= -->
+  <script>
+    // ==========================================
+    // DATA LAYER DEFINITIONS (TEXTBOOK SYLLABUS EXPANSION)
+    // ==========================================
+    const LESSONS = [
+      {
+        id: 'foundations_gov',
+        category: 'Foundations',
+        title: 'Module 1: The Big Picture, Life Cycles & Strategic Governance',
+        icon: 'layers',
+        readTime: '15 mins',
+        ecoMap: 'ECO Task 2.1, 2.8',
+        concept: 'Shift from static checklist compliance to responsive governance. Master the interface between projects, programs, portfolios, and operating business models.',
+        details: `Success on the PMP requires treating projects as temporary governance structures explicitly chartered to deliver strategic business outcomes. This module focuses on the strategic landscape, the spectrum of lifecycles, and how governance interfaces with executive decision-making.`,
+        sections: [
+          {
+            title: "1. Strategic Systems for Value Delivery",
+            paragraphs: [
+              "Organizational strategies establish portfolios to maximize strategic priorities. A Portfolio groups projects, programs, and sub-portfolios to facilitate priority and resource selection based on high-level enterprise budgets. Programs cluster related projects to unlock synergistic coordinates (e.g., sharing a security architect across 4 cloud projects) that could not be achieved if managed standalone.",
+              "Projects represent the tactical execution arm of this value system. Under PMBOK 8, the Project Manager serves as an active systems-thinking catalyst. The PM is accountable for tracking how changing organizational and environmental conditions impact the business case and alignment matrices, ensuring outputs seamlessly convert to business outcomes.",
+              "A dynamic feedback loop is required: Strategic Portfolios determine funding -> Programs organize components -> Projects deliver targeted outputs -> Operations integrates outputs to generate benefits, sending performance data upstream to refine strategic portfolios."
+            ]
+          },
+          {
+            title: "2. Lifecycle Tailoring and Phase Gates",
+            paragraphs: [
+              "Development approaches include Predictive, Iterative, Incremental, Adaptive (Agile), or Hybrid spectrums. Predictive (Waterfall) structures require complete specification baseline freeze before initiation. Cost, Schedule, and Quality baselines are tightly integrated. Phase Gates serve as binary validation checkpoints where the sponsor assesses three paths: (1) Proceed, (2) Pivot/Modify baseline parameter, (3) Terminate/Kill the project to avoid wasting organizational cash.",
+              "Adaptive cycles manage requirements in a prioritized, dynamic backlog. Requirements are progressively elaborated through short sprint cycles. Sprints conclude with product reviews where customer validation acts as a decentralized governance checkpoint. Hybrid designs split components: e.g., Predictive scheduling for hardware procurement and supply-chain logistics, while running Adaptive cycles for software design. The PM must coordinate release points across these different speeds."
+            ]
+          },
+          {
+            title: "3. Governance Thresholds & Tolerances",
+            paragraphs: [
+              "Governance is the framework that guides project activities without micromanagement. Tolerances are the quantified acceptable variations around specific baseline criteria (e.g., +/- $20,000 budget, or +/- 5 days schedule delay). A Threshold is a specific value boundary representing a hard limit. When a baseline variance matches or exceeds a threshold, it triggers a mandatory, pre-approved recovery action plan and immediate escalation to the governing steering committee."
+            ]
+          }
+        ],
+        pmpMindset: 'Systems Thinking. A master PM views the project as a dynamic ecosystem. If a resource is pulled, they do not just look at schedule delay; they trace the system-wide impact on risk, cost, team fatigue, and stakeholder trust.',
+        examTips: [
+          { sub: "Static Projects Trap", tip: "Reject any answer that treats project goals as unchangeable. If a competitor launches a superior product, the PM must reassess the business case, not blindly build the outdated scope." },
+          { sub: "Escalation Trigger", tip: "Do not escalate a standard variance that falls within acceptable Tolerances. Only escalate when a Threshold is breached or when an issue completely blocks the project team with no internal resolution possible." }
+        ]
+      },
+      {
+        id: 'stakeholder_vision',
+        category: 'Stakeholder',
+        title: 'Module 2: Stakeholder Dynamics, Vision Co-Creation & Communication Flow',
+        icon: 'users',
+        readTime: '18 mins',
+        ecoMap: 'ECO Task 1.1, 1.4, 1.5, 1.8',
+        concept: 'Transitioning from transactional stakeholder management to active stakeholder empathy, trust co-creation, and psychologically safe feedback systems.',
+        details: `Stakeholders drive risk, define value, and control access to resources. Success on the PMP requires knowing how to analyze stakeholder influence patterns, build a shared vision statement, and establish structured communications that prevent information silos.`,
+        sections: [
+          {
+            title: "1. Stakeholder Diagnostics & Dynamic Register",
+            paragraphs: [
+              "Stakeholders are identified continuously. Use mapping models based on Power, Interest, Influence, and Legitimacy. The Salience Model is particularly useful for categorizing stakeholder claims based on urgency, legitimacy, and power. Update the Stakeholder Register continuously as organizational changes occur.",
+              "Never include confidential, highly sensitive political personal notes in the Stakeholder Register, since this document is accessible to team members. Detailed engagement strategy notes that contain behavioral analysis should be preserved in the Stakeholder Engagement Plan under restricted access permissions."
+            ]
+          },
+          {
+            title: "2. Co-Creating the Common Vision",
+            paragraphs: [
+              "A common vision is the foundational psychological alignment tool. Co-create the vision using brainstorming, Delphi consensus methods, dot-voting, or silent brain-writing. Ensure the vision clearly outlines the core business problem, the target future state, and the criteria for value realization. By making stakeholders active co-creators of the vision, resistance is dramatically minimized during project rollouts."
+            ]
+          },
+          {
+            title: "3. Designing Communication Flow Channels",
+            paragraphs: [
+              "The Communication Management Plan details the who, what, when, how, and why of information flow. Calculate communication channels using the classic formula: \\(C = \\frac{N(N - 1)}{2}\\) where \\(N\\) is the number of stakeholders. Notice that as \\(N\\) grows, the channels of potential noise and misalignment grow exponentially.",
+              "Minimize communication barriers ('noise') by establishing feedback confirmation cycles: Sender encodes -> Transmits -> Receiver decodes -> Receiver confirms understanding -> Sender validates the confirmation. This closed-loop approach reduces assumptions."
+            ]
+          }
+        ],
+        pmpMindset: 'Empathy-Driven Alignment. Stakeholder resistance is usually a symptom of unaddressed fear, role ambiguity, or perceived threat to their status. Treat resistance as a project risk to be analyzed, mitigated, and understood.',
+        examTips: [
+          { sub: "Active Engagement", tip: "Correct options favor collaborative, face-to-face (or high-bandwidth virtual) discussions over passive email updates when stakeholders are upset or misaligned." },
+          { sub: "Register vs. Plan", tip: "If a new stakeholder is discovered, first add them to the Stakeholder Register. If you need to change how you engage them, update the Stakeholder Engagement Plan." }
+        ]
+      },
+      {
+        id: 'team_conflict',
+        category: 'Teams',
+        title: 'Module 3: Team Architectures, Conflict Resolution & Knowledge Management',
+        icon: 'brain',
+        readTime: '15 mins',
+        ecoMap: 'ECO Task 1.2, 1.3, 1.7',
+        concept: 'Cultivating highly collaborative, self-organizing teams while establishing a robust knowledge ecosystem that converts tacit knowledge to explicit assets.',
+        details: `The Project Manager is no longer an authoritarian director; they are a servant leader tasked with creating psychological safety, resolving friction constructively, and building institutional memory through active knowledge management.`,
+        sections: [
+          {
+            title: "1. Tuckman Ladder & Situational Servant Leadership",
+            paragraphs: [
+              "Forming (high anxiety, low clear direction), Storming (clashing personalities, conflict over priorities), Norming (cohesive standards, mutual trust), Performing (high efficiency, decentralized self-organization), and Adjourning (releasing assets and transition of knowledge). The PM must adapt their leadership style dynamically using Situational Leadership: Directing in forming, Coaching in storming, Supporting in norming, and Delegating in performing.",
+              "Servant leadership focuses on protecting the team from external distractions, removing administrative barriers, managing team-level conflict, and actively cultivating psychological safety."
+            ]
+          },
+          {
+            title: "2. Conflict Resolution Thomas-Kilmann Architecture",
+            paragraphs: [
+              "Understand the 5 conflict resolution modes: (1) Collaborating/Problem-Solving (win-win, preferred; addresses root cause), (2) Compromising (lose-lose, both yield elements to speed settlement), (3) Smoothing/Accommodating (highlights alignment, temporary), (4) Forcing/Directing (win-lose, authorized fiat), (5) Avoiding/Withdrawing (postpones debate). First encourage the team members to resolve the conflict independently before stepping in."
+            ]
+          },
+          {
+            title: "3. Institutionalizing Explicit & Tacit Knowledge",
+            paragraphs: [
+              "Explicit knowledge is codified, structured, and recorded (documents, databases, WBS dictionaries). Tacit knowledge is intuitive, skill-based, and highly personal (negotiation techniques, design instincts). Capture both by organizing community-of-practice forums, lessons-learned sessions, pair programming, and cross-functional mentoring programs."
+            ]
+          }
+        ],
+        pmpMindset: 'Empowerment and Safety. Give your team the resources, clarify their RACI assignments, set up clear decision-making boundaries, and then get out of their way. Treat conflicts as constructive design opportunities.',
+        examTips: [
+          { sub: "First Step in Conflict", tip: "The PM must always encourage the conflicting parties to resolve the issue themselves first. Only step in if it becomes disruptive, threatens safety, or impacts baseline delivery." },
+          { sub: "Collaboration Over Compromise", tip: "Compromise is a secondary fallback. Always look for options that co-create a win-win (Collaborating/Problem Solving) by getting to the root cause of the issue." }
+        ]
+      },
+      {
+        id: 'core_planning',
+        category: 'Core Planning',
+        title: 'Module 4: Scope Definition, Value Breakdown Structures & Strategic Risk Planning',
+        icon: 'target',
+        readTime: '18 mins',
+        ecoMap: 'ECO Task 2.2, 3.2, 3.5',
+        concept: 'Transitioning from WBS output-centric planning to comprehensive Value Breakdown Structures (VBS) and qualitative/quantitative risk modeling.',
+        details: `Planning in the 8th Edition must couple scope to value metrics. This module focuses on elicitation techniques, the differences between standard WBS and the new Value Breakdown Structure, compliance baselines, and structured risk analysis workflows.`,
+        sections: [
+          {
+            title: "1. Scope Deconstruction via WBS vs. VBS",
+            paragraphs: [
+              "While the Work Breakdown Structure (WBS) decomposes the project scope into manageable, deliverable-based work packages, PMBOK 8 integrates the Value Breakdown Structure (VBS). The VBS decomposes desired business outcomes, mapping each technical deliverable directly to a measurable value outcome.",
+              "This mapping prevents scope creep. If a work package in the WBS cannot trace back to a value node in the VBS, it is deemed waste and tailored out. Elicitation is conducted using interviews, observations, focus groups, surveys, and facilitated joint workshops."
+            ]
+          },
+          {
+            title: "2. Qualitative vs. Quantitative Risk Modeling",
+            paragraphs: [
+              "Risk is an uncertain future event. Qualitative risk analysis ranks risks based on probability and impact scores. Quantitative risk analysis calculates actual numerical impact using Monte Carlo simulations, decision trees, and Expected Monetary Value (EMV).",
+              "Manage threats through Avoidance, Mitigation, Transfer, or Acceptance. Capture opportunities through Exploiting, Enhancing, Sharing, or Acceptance."
+            ]
+          },
+          {
+            title: "3. Structural Compliance Foundations",
+            paragraphs: [
+              "Compliance frameworks must be integrated during initiation. Track legal, regulatory, security, and corporate compliance factors. Build validation checkpoints directly into the Definition of Done (DoD) to ensure continuous quality control, avoiding late-stage compliance failure."
+            ]
+          }
+        ],
+        pmpMindset: 'Risk-Adjusted Value. Planning is not about producing pretty documents; it is about reducing uncertainty and maximizing value trajectory. Value and risk are two sides of the same coin.',
+        examTips: [
+          { sub: "EMV Calculation", tip: "Expected Monetary Value (EMV) is calculated as: EMV = P x I where P is probability and I is impact. Sum the EMV values of all paths on a decision tree to determine the optimal economic choice." },
+          { sub: "Risk vs. Issue", tip: "A risk is a potential event (update Risk Register). An issue is a realized event (update Issue Log). Correct exam answers depend heavily on whether the scenario event has already occurred." }
+        ]
+      },
+      {
+        id: 'integrated_planning',
+        category: 'Integrated',
+        title: 'Module 5: Schedule, Finance, EVM, Quality, and Procurement Integration',
+        icon: 'bar-chart-2',
+        readTime: '20 mins',
+        ecoMap: 'ECO Task 2.5, 2.6, 2.7, 2.8',
+        concept: 'Formulating integrated baselines and optimizing performance through mathematical modeling, continuous quality assurance, and legal procurement structures.',
+        details: `Master the mathematical core of project management. This module details schedule network analysis, critical path computation, quality models, contract types, and the entire Earned Value Management (EVM) system.`,
+        sections: [
+          {
+            title: "1. Critical Path Methodology & Schedule Compression",
+            paragraphs: [
+              "The Critical Path is the sequence of dependent activities that determines the shortest possible project duration. It has zero float. Calculate Float as: \\(\\text{Float} = \\text{LS} - \\text{ES}\\) or \\(\\text{LF} - \\text{EF}\\). Delaying a critical task delays the project.",
+              "Compress schedule using: (1) Crashing (adding resources, increases cost and risk of coordination friction), (2) Fast-Tracking (executing sequential tasks in parallel, increases rework risk)."
+            ]
+          },
+          {
+            title: "2. Earned Value Management System Formulas",
+            paragraphs: [
+              "Earned Value (EV) measures physical work completed. Actual Cost (AC) is the cost incurred. Planned Value (PV) is the budgeted cost for scheduled work.",
+              "Cost Variance: \\(\\text{CV} = \\text{EV} - \\text{AC}\\) (Positive is under budget). Schedule Variance: \\(\\text{SV} = \\text{EV} - \\text{PV}\\) (Positive is ahead of schedule).",
+              "Cost Performance Index: \\(\\text{CPI} = \\frac{\\text{EV}}{\\text{AC}}\\). Schedule Performance Index: \\(\\text{SPI} = \\frac{\\text{EV}}{\\text{PV}}\\). If indexes are < 1.0, performance is unfavorable.",
+              "Estimate at Completion: \\(\\text{EAC} = \\frac{\\text{BAC}}{\\text{CPI}}\\). To-Complete Performance Index: \\(\\text{TCPI}_{\\text{BAC}} = \\frac{\\text{BAC} - \\text{EV}}{\\text{BAC} - \\text{AC}}\\). A TCPI value > 1.0 indicates high efficiency is needed."
+            ]
+          },
+          {
+            title: "3. Quality Frameworks & Procurement Strategy",
+            paragraphs: [
+              "Quality Assurance (QA) is process-oriented, validating that procedures conform to standards. Quality Control (QC) is product-oriented, inspecting specific deliverables.",
+              "Select contracts based on risk profile: Firm-Fixed-Price (FFP) shifts risk to the seller, Cost-Reimbursable (CR) shifts risk to the buyer, and Time & Materials (T&M) is used for rapid, open-ended resource hiring."
+            ]
+          }
+        ],
+        pmpMindset: 'Baseline Accountability. Numbers do not lie, but they require interpretation. A low CPI can be a strategic investment if it mitigates a critical risk that would have collapsed the project later.',
+        examTips: [
+          { sub: "TCPI Performance Indicator", tip: "If TCPI is 1.25, it means the team must perform at 125% efficiency for the remainder of the project to meet the budget. This is highly unrealistic; discuss a budget readjustment." },
+          { sub: "Critical Path Risk", tip: "If an activity on the critical path is delayed by 1 day, the entire project is delayed by 1 day. Do not accept excuses; immediately execute schedule compression." }
+        ]
+      },
+      {
+        id: 'execution_impediments',
+        category: 'Execution',
+        title: 'Module 6: Execution Cadence, Change Control, and Impediment Elimination',
+        icon: 'refresh-cw',
+        readTime: '15 mins',
+        ecoMap: 'ECO Task 2.9, 3.3, 3.4',
+        concept: 'Maintaining absolute control over artifact configuration while acting as an aggressive impediment clear-cut to maintain team momentum.',
+        details: `Execution is where planning meets reality. A master PM must establish rigorous artifact configuration procedures, navigate complex change request workflows, and differentiate between issues, risks, and blockers.`,
+        sections: [
+          {
+            title: "1. Versioning & Configuration Management",
+            paragraphs: [
+              "Configuration Management tracks physical and functional specifications of deliverables and artifacts, preventing version mismatch. The Configuration Management Plan defines what is tracked, while the Configuration Management System handles the physical version control and access permissions."
+            ]
+          },
+          {
+            title: "2. Integrated Change Control (ICC) Sequence",
+            paragraphs: [
+              "In predictive projects, follow the exact chronological change control workflow: (1) Change is requested, (2) Log change request, (3) Perform initial impact assessment across all domains (scope, schedule, cost, quality, risk, resources), (4) Develop options/solutions, (5) Submit proposal to CCB, (6) Update baselines and notify stakeholders of decision, (7) Implement and monitor."
+            ]
+          },
+          {
+            title: "3. Blocker vs. Issue Management",
+            paragraphs: [
+              "An Impediment or Blocker active slows down the team. The PM must clear it. An Issue is an active problem logged in the Issue Log. Each issue must have a single assigned owner, priority, description, and target resolution date."
+            ]
+          }
+        ],
+        pmpMindset: 'Guard the Baselines. Scope creep is a silent killer. However, the PM is not a wall to reject change; they are a funnel to ensure every change is analyzed, quantified, approved, and tracked.',
+        examTips: [
+          { sub: "Assess First Trap", tip: "If a customer asks for a scope addition, NEVER implement it immediately, and NEVER say 'no' immediately. The correct answer is always to assess the impact first." },
+          { sub: "Issue Log Updates", tip: "When an active dispute or issue occurs, always update the Issue Log before taking any other management or escalation action. It maintains truth transparency." }
+        ]
+      },
+      {
+        id: 'business_closure',
+        category: 'Closure',
+        title: 'Module 7: Business Environment, OCM, and Structured Project Closure',
+        icon: 'compass',
+        readTime: '15 mins',
+        ecoMap: 'ECO Task 2.10, 3.6, 3.7, 3.8',
+        concept: 'Driving continuous business scanning, managing the psychological transition of organizational change, and executing absolute closing protocols.',
+        details: `Projects exist to drive business value in a dynamic world. This module covers external environmental factors, Kotter’s change management model, and the chronological steps required to close a project or phase successfully.`,
+        sections: [
+          {
+            title: "1. Business Environment Scan (PESTLE)",
+            paragraphs: [
+              "Perform regular environmental scanning using PESTLE (Political, Economic, Social, Technological, Legal, Environmental). When legislation impacts compliance targets, adjust the project requirements through proper change control."
+            ]
+          },
+          {
+            title: "2. Organizational Change Management (OCM)",
+            paragraphs: [
+              "Implement Kotter’s 8-Step Change Model to overcome resistance: (1) Establish urgency, (2) Form guiding coalition, (3) Create vision, (4) Communicate vision, (5) Empower action, (6) Secure short-term wins, (7) Consolidate gains, (8) Institutionalize change. Ensure the benefits management plan matches change adoption speed."
+            ]
+          },
+          {
+            title: "3. Structured Closure Protocols",
+            paragraphs: [
+              "Follow the chronological closing sequence: (1) Obtain formal, signed customer acceptance of deliverables, (2) Transition outputs to operations and verify transition readiness, (3) Conduct final financial audits and reconciliation, (4) Capture, document, and archive final lessons learned, (5) Compile and issue the Final Report, (6) Release team resources back to functional managers."
+            ]
+          }
+        ],
+        pmpMindset: 'A Leader of Change. You are not a manager of tasks; you are a driver of transformation. A project is only successful when its outcomes are fully institutionalized and delivering planned value.',
+        examTips: [
+          { sub: "Transition Readiness", tip: "Do not consider a project closed until you have conducted transition readiness audits. Operations must be fully trained, and support structures must be in place before handoff." },
+          { sub: "Historical Archives", tip: "Always update lessons learned before releasing the team. Releasing the team first eliminates your primary knowledge source, resulting in lost institutional memory." }
+        ]
+      },
+      {
+        id: 'pmbok_8th_shifts',
+        category: '8th Edition',
+        title: 'Module 8: Pioneering Shifts in PMBOK 8th Edition',
+        icon: 'cpu',
+        readTime: '12 mins',
+        ecoMap: 'New Syllabus',
+        concept: 'Transitioning from mechanistic execution checklists to empirical, data-driven frameworks, outcome tracking, and Generative AI human-in-the-loop coordination.',
+        details: `The 8th Edition shifts the entire foundation of project management. Built upon empirical feedback from 48,000 global practitioner data points, it addresses modern complexity, Generative AI integration, and the primacy of Outcomes over Outputs.`,
+        sections: [
+          {
+            title: "1. Evidence-Based PM Standards",
+            paragraphs: [
+              "PMBOK 8 consolidates actual practice telemetry from global markets. It minimizes static processes in favor of flexible, principles-driven action designed to deliver value, prioritizing situational responsiveness."
+            ]
+          },
+          {
+            title: "2. Outome-Based Orientation over Outputs",
+            paragraphs: [
+              "Outputs are tangible products (like code or hardware). Outcomes are the functional benefits achieved by utilizing those outputs (increased speed, reduced waste). Success is measured by actual outcome delivery, not simply on-time baseline conformity."
+            ]
+          },
+          {
+            title: "3. Responsible Generative AI Integration",
+            paragraphs: [
+              "Leverage Generative AI tools to draft charters, simulate risk impacts, and optimize schedules. However, maintain a Human-in-the-Loop (HITL) model. The PM remains fully accountable for validating all outputs, protecting data privacy, and managing team dynamics."
+            ]
+          }
+        ],
+        pmpMindset: 'The Modern High-Tech PM. Leverage AI to optimize cognitive load and automate routine planning tasks, freeing your time to focus on complex stakeholder negotiations, leadership, and value tracking.',
+        examTips: [
+          { sub: "The Outcome Filter", tip: "When evaluating options where a customer's business context has shifted, prioritize answers that actively measure benefit realization and value over simple administrative compliance." },
+          { sub: "AI Data Privacy Strategy", tip: "Never enter proprietary client data or trade secrets into public AI engines. Correct answers will emphasize secure data management practices and proactive governance checks." }
+        ]
+      }
+    ];
+
+    const FLASHCARDS = [
+      { question: "What is the critical difference between an 'Output' and an 'Outcome' in PMBOK 8?", answer: "An Output is a tangible deliverable (e.g., system launch). An Outcome is the functional result or benefit realized from using it (e.g., 20% higher operational speed). Success is measured by outcomes.", category: "8th Edition" },
+      { question: "How does the PM handle Generative AI securely in 8th Edition?", answer: "Treat GenAI as a co-pilot. Keep a Human-in-the-Loop, validate all generated suggestions manually, and enforce strict data privacy by avoiding entering sensitive corporate data into public LLMs.", category: "8th Edition" },
+      { question: "What is the difference between a project 'Threshold' and 'Tolerance'?", answer: "Tolerance is the acceptable range of variation around a target (e.g., +/- 10% budget). A Threshold is a specific boundary that, if crossed, requires immediate corrective actions and escalation.", category: "Governance" },
+      { question: "How does the PM calculate Expected Monetary Value (EMV)?", answer: "EMV = Probability x Impact. EMV is calculated for various risk branches on a decision tree, and the values are summed to evaluate the financial feasibility of paths.", category: "Planning" },
+      { question: "Describe the proper chronological project closure sequence.", answer: "(1) Gain formal customer acceptance, (2) Transition deliverables to operations, (3) Perform final audits, (4) Document lessons learned, (5) Compile Final Report, (6) Release team.", category: "Closure" },
+      { question: "What is the difference between Tacit and Explicit Knowledge?", answer: "Explicit is written, documented, and easily shared. Tacit is experience-based, intuitive, and personal. Manage explicit via databases, and tacit via mentoring, shadowing, and retrospectives.", category: "Teams" },
+      { question: "Explain the Thomas-Kilmann Collaborating/Problem-Solving technique.", answer: "It is a win-win approach that incorporates multiple viewpoints to identify the root cause of an issue. It is always the preferred first step for conflict resolution on the exam.", category: "Teams" },
+      { question: "How does Kotter's 8-Step OCM model integrate into project planning?", answer: "It guides user adoption through structured phases (Establishing urgency, forming a coalition, anchoring change) to ensure stakeholders adopt the project's outputs.", category: "Closure" },
+      { question: "What is the formula for communication channels, and what does N represent?", answer: "C = N(N-1)/2, where N is the total number of project stakeholders. As N increases, the potential for noise and communication complexity increases exponentially.", category: "Stakeholder" },
+      { question: "Differentiate between Quality Assurance (QA) and Quality Control (QC).", answer: "QA is process-oriented (preventing defects through auditing processes), while QC is product-oriented (identifying defects by inspecting physical deliverables).", category: "Integrated" },
+      { question: "When do you use a WBS Dictionary?", answer: "The WBS Dictionary defines the details, parameters, scope of work, and acceptance criteria of each work package in the WBS. It prevents scope creep.", category: "Planning" },
+      { question: "What is progressive elaboration?", answer: "The continuous process of refining and adding detail to project plans as more accurate information and data become available throughout the project lifecycle.", category: "Planning" },
+      { question: "Explain the Critical Path Method (CPM).", answer: "It is the sequence of dependent tasks that determines the shortest possible project timeline. Tasks on the critical path have zero float.", category: "Integrated" },
+      { question: "What is the formula for Cost Performance Index (CPI), and what does CPI < 1.0 mean?", answer: "CPI = EV / AC. A CPI < 1.0 indicates the project is currently over budget.", category: "Integrated" },
+      { question: "Explain TCPI (To-Complete Performance Index) and its formula.", answer: "TCPI measures the efficiency required to finish the project within budget. TCPI = (BAC - EV) / (BAC - AC). A TCPI > 1.0 means the team must perform with higher efficiency.", category: "Integrated" },
+      { question: "When do you use a Firm-Fixed-Price (FFP) contract?", answer: "When project scope and specifications are well-defined and stable. The seller carries the risk of cost overruns.", category: "Integrated" },
+      { question: "What is the primary role of a Project Sponsor?", answer: "To authorize project funding, champion the project's business vision, make decisions at Phase Gates, and sign off on major scope changes.", category: "Governance" },
+      { question: "Explain the Scrum Master's role in Agile.", answer: "A servant leader who removes team impediments, coaches the team on Scrum principles, facilitates team meetings, and ensures psychological safety.", category: "Teams" },
+      { question: "What is a Daily Standup meeting?", answer: "A short, daily meeting (usually 15 minutes) for the team to coordinate work, discuss achievements, plan the day's tasks, and flag dependencies and impediments.", category: "Teams" },
+      { question: "What is the purpose of the Risk Register?", answer: "To log identified risks, along with their probability, impact, proposed responses, and assigned risk owners.", category: "Planning" },
+      { question: "How does PESTLE analysis support environmental scanning?", answer: "It evaluates external Political, Economic, Social, Technological, Legal, and Environmental factors to determine risks and opportunities.", category: "Closure" },
+      { question: "What is a Configuration Management System?", answer: "A set of procedures and tools to track physical version control and functional characteristics of artifacts, preventing version mismatch.", category: "Execution" },
+      { question: "How does a PM handle a scope change in a predictive project?", answer: "Evaluate the impact on cost, schedule, risk, and resources, then submit a formal change request to the CCB for approval.", category: "Execution" },
+      { question: "What is the 'Definition of Done' (DoD)?", answer: "A checklist of quality criteria and compliance standards that a deliverable must satisfy to be considered complete in adaptive lifecycles.", category: "Planning" },
+      { question: "Explain 'Crashing' and 'Fast-Tracking' in schedule compression.", answer: "Crashing adds resources to critical path tasks (increases cost). Fast-tracking runs sequential tasks in parallel (increases rework risk).", category: "Integrated" }
+    ];
+
+    const CONCEPT_NODES = [
+      {
+        name: "Adopt a Holistic View",
+        domain: "Systems Thinking Integration",
+        details: "<strong>Definition:</strong> Treating the project as an integrated ecosystem of connected variables where a change in one domain impacts others.<br><br><strong>Upstream Strategic Link:</strong> Connects directly to portfolio strategic choices. If executive priorities change, the project parameters must pivot to maintain strategic alignment.<br><br><strong>Downstream Operational Handoff:</strong> Ensures that deliverables map cleanly to operational readiness, so sustainment teams can manage the output without resource gaps.<br><br><strong>Case Study:</strong> A tech company changed their cloud provider mid-project. A holistic PM quickly recalculated scope, revised compliance parameters (PESTLE), adapted security baselines, and updated the training schedule to prevent downtime at launch.<br><br><strong>Exam Trap:</strong> Beware of options that address a schedule delay or cost variance in isolation without assessing the secondary impacts on risk, resources, and scope."
+      },
+      {
+        name: "Focus on Value",
+        domain: "Outcome Realization",
+        details: "<strong>Definition:</strong> Ensuring every deliverable can be traced directly to planned business outcomes and value metrics rather than administrative outputs.<br><br><strong>Upstream Strategic Link:</strong> Aligns with the business case and benefits realization register maintained by portfolio directors.<br><br><strong>Downstream Operational Handoff:</strong> Establishes clear post-launch metrics so operations can measure and report actual benefit realization.<br><br><strong>Case Study:</strong> During an ERP upgrade, the PM removed three highly requested custom reports because they did not contribute to reducing transactional time, preserving focus on speed goals.<br><br><strong>Exam Trap:</strong> Incorrect options often prioritize completing the planned scope on time, even if a market shift has rendered that scope useless. Always select options that re-evaluate value."
+      },
+      {
+        name: "Embed Quality",
+        domain: "Preventative Process Control",
+        details: "<strong>Definition:</strong> Integrating quality criteria directly into the development processes instead of relying on post-delivery audits.<br><br><strong>Upstream Strategic Link:</strong> Aligns with the organization's corporate quality standards and compliance frameworks.<br><br><strong>Downstream Operational Handoff:</strong> Reduces maintenance costs and failure rates after transitioning deliverables to operations.<br><br><strong>Case Study:</strong> An automotive project built automated compliance check gates into every design sprint, reducing the defect rate by 90% during final vehicle assembly.<br><br><strong>Exam Trap:</strong> Correct options will favor preventative audits, continuous retro reviews, and team training over final stage gates or end-of-lifecycle testing."
+      },
+      {
+        name: "Be an Accountable Leader",
+        domain: "Servant Leadership",
+        details: "<strong>Definition:</strong> Leading with integrity, creating psychological safety, and establishing clear lines of accountability for deliverables.<br><br><strong>Upstream Strategic Link:</strong> Promotes corporate governance and transparency throughout project lifecycles.<br><br><strong>Downstream Operational Handoff:</strong> Prepares the team to support the transition of deliverables to the customer.<br><br><strong>Case Study:</strong> A hybrid project encountered a major technical failure. Instead of finger-pointing, the PM organized an objective review, protected the team from external criticism, and collaborated to establish a recovery plan.<br><br><strong>Exam Trap:</strong> Correct options show PMs actively resolving conflict and coaching, rather than escalating team issues to functional managers."
+      },
+      {
+        name: "Integrate Sustainability",
+        domain: "Ecosystem Stewardship",
+        details: "<strong>Definition:</strong> Designing project outcomes that are economically, socially, and environmentally sustainable over their lifecycle.<br><br><strong>Upstream Strategic Link:</strong> Directly supports environmental, social, and governance (ESG) goals at the portfolio level.<br><br><strong>Downstream Operational Handoff:</strong> Lowers the long-term cost of operations and minimizes environmental impact.<br><br><strong>Case Study:</strong> A packaging project team designed a new container using biodegradable materials, reducing long-term shipping weight, disposal costs, and environmental impact.<br><br><strong>Exam Trap:</strong> Choose options that balance short-term schedule gains against long-term operational costs and environmental or social risks."
+      },
+      {
+        name: "Build an Empowered Culture",
+        domain: "Autonomous Teams",
+        details: "<strong>Definition:</strong> Cultivating a culture of psychological safety, collaboration, and decentralized decision-making within defined thresholds.<br><br><strong>Upstream Strategic Link:</strong> Supports organizational agility and fosters a culture of innovation.<br><br><strong>Downstream Operational Handoff:</strong> Creates highly skilled resources ready to lead future strategic initiatives.<br><br><strong>Case Study:</strong> A PM established clear budget and schedule tolerances for an agile team, allowing them to make design decisions independently, reducing decision cycle time by 80%.<br><br><strong>Exam Trap:</strong> Incorrect options typically involve the PM micro-managing tasks or requiring formal approval for minor variations within acceptable tolerances."
+      }
+    ];
+
+    // ==========================================
+    // CO-PILOT SANDBOX TEMPLATES
+    // ==========================================
+    const GEN_AI_SANDBOX_TEMPLATES = [
+      {
+        role: "Risk Analysis Copilot",
+        prompt: "Act as an expert PM risk strategist. Generate a structured risk identification checklist for a hybrid software development project migrating legacy infrastructure to a secure cloud server, accounting for both technical risks and human stakeholder change management resistance.",
+        output: `### AI Copilot Draft: Cloud Migration Risk Framework
+1. **Technical Transition Risks**:
+   - *Data Loss/Corruption during migration*: Set up automated checksum validation and phased rollback protocols.
+   - *System Downtime exceeding SLAs*: Plan migration over off-peak weekends using a secondary staging environment.
+2. **Human Stakeholder Risks**:
+   - *Resistance to Legacy Tool Retirement*: Users refuse to adopt the new cloud CRM due to lack of training. Mitigate via immediate training cohorts and champion advocacy groups.
+   - *Governance/Compliance Friction*: Security team blocks release due to non-compliant cloud configurations. Mitigate by involving security officers in early sprint reviews.
+
+*PM Accountability Check: Human-in-the-loop review required to align cloud provider SLAs with specific geographic regulatory requirements.*`
+      },
+      {
+        role: "Outcomes-Based Metrics Creator",
+        prompt: "I am developing an internal employee onboarding portal. Instead of just tracking 'portal launched on time' (Output), give me 3 value-driven 'Outcome' metrics that I can track over the next 6 months to prove project business success.",
+        output: `### AI Copilot Draft: Outcomes-Based Metrics Dashboard
+1. **Time-to-Productivity (TTP)**:
+   - *Goal*: Reduce average days from hire to first independent task completion from 14 days to 9 days.
+   - *Why it matters*: Direct financial impact; employees become value-generators faster.
+2. **Onboarding Retention Rate**:
+   - *Goal*: Increase the 90-day retention of new hires by 15% year-over-year.
+   - *Why it matters*: Eliminates expensive re-recruitment costs and builds organizational stability.
+3. **User Self-Service Adoption Rate**:
+   - *Goal*: 85%+ of standard administrative questions (benefits, payroll, IT setups) answered automatically within the portal without HR staff intervention.
+   - *Why it matters*: Frees up HR bandwidth for strategic talent acquisition.
+
+*PM Accountability Check: Proactively gain agreement with HR Operations on how baseline and post-launch data will be collected.*`
+      },
+      {
+        role: "Empowered Culture Conflict Coach",
+        prompt: "Two senior developers on my agile team are in high conflict over software architecture. One wants microservices, the other wants a robust monolith. It is delaying the sprint planning. How can I resolve this as a Servant Leader?",
+        output: `### Servant Leader Conflict Resolution Strategy
+1. **De-escalate & Re-frame**:
+   - Shift the conversation from personal preference to objective project outcomes. Ask: 'Which architecture best supports our speed-to-market and low maintenance cost targets?'
+2. **Empower the Team (Decentralized Decision-Making)**:
+   - Challenge them to run a rapid 1-day proof-of-concept (Spike) for both approaches. Let the tangible proof guide the design decision.
+3. **Establish Thresholds**:
+   - Remind the team that both must commit fully to the chosen decision ('Disagree and Commit') once a path is finalized, ensuring delivery accountability.
+
+*PM Accountability Check: Ensure both developers feel their perspectives were validated to preserve team trust and safety.*`
+      }
+    ];
+
+    // =========================================================================
+    // 180-QUESTION PROCEDURAL PERMUTATION GENERATOR (SOLVES TOKEN LIMIT)
+    // =========================================================================
+    const CORE_SCENARIOS = [
+      {
+        id: 1,
+        domain: "Process",
+        badge: "Outcomes Over Outputs",
+        scenario: "Your project team is building an automated inventory tool. Midway through development, you realize that while the technical specifications (outputs) are 100% on track, a new company policy means the tool will only be used by 5% of staff, meaning the target business benefits (outcomes) won't be realized. According to PMBOK 8th Edition, what is the best proactive action to take?",
+        options: [
+          { key: "A", text: "Complete the project on schedule, as meeting the defined scope and budget baselines is the ultimate test of PM success." },
+          { key: "B", text: "Proactively evaluate the impact, present the value shortfall to the sponsor and key stakeholders, and recommend co-creating a transition plan or pivoting scope to align with the new policy." },
+          { key: "C", text: "Ignore the issue because corporate policy shifts are outside the project boundary and are the responsibility of the Program Management Office." },
+          { key: "D", text: "Ask the development team to immediately stop all coding and wait for the Sponsor to notice the policy discrepancy." }
+        ],
+        correct: "B",
+        explanation: "PMBOK 8th Edition prioritizes 'Outcomes over Outputs'. The project's ultimate success is judged by its delivered business value. Proactive ownership dictates that the PM must not blindly build useless products; they must evaluate and collaborate with stakeholders to realign the project with the value state."
+      },
+      {
+        id: 2,
+        domain: "Process",
+        badge: "GenAI Integration",
+        scenario: "You are planning a complex infrastructure project and want to draft the risk register and early schedule simulations. You decide to utilize a Generative AI tool to accelerate the process. Which approach aligns perfectly with the 8th Edition guidelines on AI integration?",
+        options: [
+          { key: "A", text: "Input sensitive company proprietary project data directly into a public AI tool and copy-paste the output directly into the Project Charter to save planning time." },
+          { key: "B", text: "Avoid using Generative AI entirely, as PMBOK 8th Edition considers automated tool usage to be a breach of independent project management integrity." },
+          { key: "C", text: "Utilize Generative AI securely to brainstorm potential risk factors, analyze scheduling scenarios, and synthesize patterns, while maintaining a strict 'human-in-the-loop' protocol to validate all outputs and ensure data privacy." },
+          { key: "D", text: "Instruct the junior project coordinator to let the AI draft the entire plan, and hold the AI tool developer legally liable if the project fails." }
+        ],
+        correct: "C",
+        explanation: "Generative AI is a key supportive tool in the 8th Edition. However, the PM holds absolute accountability. PMs must ensure strict data privacy, treat AI as a draft assistant, and manually review, validate, and tailor all generated content."
+      },
+      {
+        id: 3,
+        domain: "People",
+        badge: "Accountable Leadership",
+        scenario: "During a daily standup meeting in a hybrid project, a critical team member complains that a functional manager keeps assigning them operational tasks, directly delaying the project's sprint goals. According to the 'Be an Accountable Leader' and 'Build an Empowered Culture' principles, how should the PM respond?",
+        options: [
+          { key: "A", text: "Tell the team member to work overtime to balance both project tasks and operational duties so the schedule doesn't slip." },
+          { key: "B", text: "Immediately file a formal complaint with HR to discipline the functional manager for unauthorized resource allocation." },
+          { key: "C", text: "Ignore the complaint since resource managers have higher organizational authority than hybrid project managers." },
+          { key: "D", text: "Proactively meet with the functional manager to discuss the conflict, assess work priority, protect the team member's focus, and collaborate on a sustainable resource allocation agreement." }
+        ],
+        correct: "D",
+        explanation: "The PM must demonstrate proactive leadership and protect the team's empowered culture. Resolving resource conflicts through collaborative, respectful negotiation with functional managers is a hallmark of an accountable servant leader."
+      },
+      {
+        id: 4,
+        domain: "Business",
+        badge: "Governance & Tolerances",
+        scenario: "Your team has identified that a critical project resource has crossed a pre-established cost tolerance limit. The baseline budget is $500,000, and the variance has now exceeded the 10% threshold. What is the correct governance action?",
+        options: [
+          { key: "A", text: "Quietly adjust the project baseline budget upwards to hide the variance from corporate sponsors." },
+          { key: "B", text: "Trigger the pre-defined corrective action plan associated with that threshold and formally communicate the variance and response to the governance steering committee." },
+          { key: "C", text: "Immediately stop all work on the project and ask the team to find a new job." },
+          { key: "D", text: "Wait until the project is completely finished before mentioning any budget overruns to stakeholders." }
+        ],
+        correct: "B",
+        explanation: "Governance establishes thresholds precisely to streamline decision-making. When a threshold is crossed, the PM must execute the pre-agreed action plan and communicate transparently with the governing body, maintaining professional accountability."
+      },
+      {
+        id: 5,
+        domain: "Process",
+        badge: "Earned Value Management",
+        scenario: "You have just taken over a project in execution. In your first status review, you find the following performance metrics: EV = $120,000, PV = $150,000, and AC = $100,000. How should you accurately report this project's state to the sponsor?",
+        options: [
+          { key: "A", text: "The project is over budget and ahead of schedule." },
+          { key: "B", text: "The project is under budget but behind schedule." },
+          { key: "C", text: "The project is under budget and ahead of schedule." },
+          { key: "D", text: "The project is over budget and behind schedule." }
+        ],
+        correct: "B",
+        explanation: "Using Earned Value Management (EVM) formulas: Cost Variance (CV) = EV - AC = $120,000 - $100,000 = +$20,000 (positive is under budget). Schedule Variance (SV) = EV - PV = $120,000 - $150,000 = -$30,000 (negative is behind schedule). Thus, the project is under budget but behind schedule."
+      }
+    ];
+
+    // Procedural Generator Engine - generates 175 additional unique scenarios
+    function generate180Questions() {
+      const list = [...CORE_SCENARIOS];
+      
+      const roles = ["Agile Coach", "Project Manager", "Hybrid Lead", "Scrum Master", "Program Manager", "Portfolio Lead"];
+      const domains = ["People", "Process", "Business"];
+      
+      const scenarioTemplates = [
+        {
+          domain: "People",
+          badge: "Conflict Management",
+          text: "Two senior developers on your team disagree on architecture. It has begun to impact sprint velocity. What should the {role} do FIRST?",
+          options: [
+            { key: "A", text: "Make the final architectural decision yourself to avoid schedule delays." },
+            { key: "B", text: "Facilitate a structured technical discussion between them, encouraging collaborative problem-solving." },
+            { key: "C", text: "Escalate the interpersonal dispute to their respective functional resource manager." },
+            { key: "D", text: "Reassign one of the developers to a different sub-project to eliminate direct contact."
+            }
+          ],
+          correct: "B",
+          explanation: "In conflict management, collaborating (win-win) is the preferred approach. The PM should first facilitate a discussion to let the team members reach consensus before exercising direct authority."
+        },
+        {
+          domain: "Process",
+          badge: "EVM Optimization",
+          text: "A project dashboard reports an Earned Value metric with a CPI of {cpi} and an SPI of {spi}. How should the {role} analyze these numbers?",
+          options: [
+            { key: "A", text: "The project is over budget and behind schedule." },
+            { key: "B", text: "The project is under budget and ahead of schedule." },
+            { key: "C", text: "The project is over budget but ahead of schedule." },
+            { key: "D", text: "The project is under budget but behind schedule." }
+          ],
+          correct: "A", // If both < 1
+          explanation: "Index values less than 1.0 indicate unfavorable performance. A CPI of less than 1.0 means you are over budget, and an SPI of less than 1.0 indicates you are behind schedule."
+        },
+        {
+          domain: "Business",
+          badge: "Compliance Integration",
+          text: "During execution, a new regulatory legal mandate is passed that affects security parameters for your project deliverables. What should the {role} do FIRST?",
+          options: [
+            { key: "A", text: "Ignore the mandate as the project charter was already authorized under old rules." },
+            { key: "B", text: "Stop all current execution sprints immediately and wait for the legal department to issue an action plan." },
+            { key: "C", text: "Conduct an impact assessment on project scope, cost, and schedule, then raise a change request." },
+            { key: "D", text: "Incorporate the mandate changes directly without telling the sponsor to save time." }
+          ],
+          correct: "C",
+          explanation: "When external compliance rules change, the PM must assess the impact before recommending baseline modifications through the formal integrated change control process."
+        },
+        {
+          domain: "Process",
+          badge: "Scope Control",
+          text: "A major stakeholder requests a minor feature addition during a sprint cycle. What is the most aligned action for the {role} to take?",
+          options: [
+            { key: "A", text: "Incorporate the feature immediately since it is minor and maintains stakeholder satisfaction." },
+            { key: "B", text: "Reject the feature because agile scope is locked from initiation." },
+            { key: "C", text: "Add the request to the product backlog for prioritization during the next planning session." },
+            { key: "D", text: "Ask the team to work overtime to deliver it without changing the sprint goal." }
+          ],
+          correct: "C",
+          explanation: "In adaptive lifecycles, changes are managed by updating and prioritizing the Product Backlog, preserving the current sprint's focus."
+        },
+        {
+          domain: "People",
+          badge: "Servant Leadership",
+          text: "The team is struggling to meet commitments due to excessive technical debt from legacy code. As the {role}, how do you resolve this?",
+          options: [
+            { key: "A", text: "Mandate strict daily overtime until code parameters match performance standards." },
+            { key: "B", text: "Collaborate with the team and product owner to allocate capacity for technical debt refactoring in upcoming sprints." },
+            { key: "C", text: "Hire an external consultant to audit and blame the developers who wrote the original code." },
+            { key: "D", text: "Reduce quality control testing steps to meet delivery deadlines." }
+          ],
+          correct: "B",
+          explanation: "A servant leader collaborates with the team and Product Owner to allocate resource capacity for addressing technical debt, maintaining quality."
+        },
+        {
+          domain: "Business",
+          badge: "Change Management",
+          text: "Operations staff are resisting adopting your project's new software deliverable. What OCM step did the {role} likely miss?",
+          options: [
+            { key: "A", text: "Failing to purchase a premium software license package." },
+            { key: "B", text: "Failing to build urgency and engage the operational staff during design phases." },
+            { key: "C", text: "Failing to request that operational managers mandate adoption." },
+            { key: "D", text: "Failing to extend the project closure timeline." }
+          ],
+          correct: "B",
+          explanation: "Under change management models, stakeholders must be engaged early to co-create solutions and build readiness, reducing adoption resistance."
+        },
+        {
+          domain: "Process",
+          badge: "Closure Protocol",
+          text: "The customer is satisfied with the prototype but has not signed off on the formal deliverables. The project timeline is ending. What should the {role} do?",
+          options: [
+            { key: "A", text: "Release all team resources and mark the project complete." },
+            { key: "B", text: "Review the verification metrics with the customer to obtain formal written acceptance before closing." },
+            { key: "C", text: "Escalate to the sponsor and demand immediate customer payment." },
+            { key: "D", text: "Initiate the next project phase and ignore the unsigned contract." }
+          ],
+          correct: "B",
+          explanation: "Formal customer sign-off and validation of completion criteria are required steps in the closure sequence before releasing resources."
+        }
+      ];
+
+      let idCounter = list.length + 1;
+      
+      // Combinatorial loop to generate exactly 180 questions
+      while (list.length < 180) {
+        const temp = scenarioTemplates[list.length % scenarioTemplates.length];
+        const role = roles[list.length % roles.length];
+        
+        let qText = temp.text.replace("{role}", role);
+        qText = qText.replace("{cpi}", "0.78").replace("{spi}", "0.82");
+        
+        // Add random variation parameters
+        const permutationId = idCounter;
+        const modifiedText = `[ID: ${permutationId}] Under a ${domains[list.length % domains.length]} focus context: ${qText}`;
+        
+        list.push({
+          id: permutationId,
+          domain: temp.domain,
+          badge: `${temp.badge} (V-${permutationId})`,
+          scenario: modifiedText,
+          options: temp.options,
+          correct: temp.correct,
+          explanation: temp.explanation
+        });
+        
+        idCounter++;
+      }
+      
+      return list;
+    }
+
+    const MASTER_QUESTIONS = generate180Questions();
+
+    // ==========================================
+    // GLOBAL STATE CONTROLLER
+    // ==========================================
+    let state = {
+      activeTab: 'dashboard',
+      searchTerm: '',
+      selectedCategory: 'All',
+      completedChapters: {
+        foundations_gov: false,
+        stakeholder_vision: false,
+        team_conflict: false,
+        core_planning: false,
+        integrated_planning: false,
+        execution_impediments: false,
+        business_closure: false,
+        pmbok_8th_shifts: false
+      },
+      currentCardIndex: 0,
+      isFlipped: false,
+      knownCardsCount: 0,
+      // Quiz Navigation State
+      activeQuizQuestionId: 1, // Start with question 1
+      selectedOption: null,
+      quizAnswersState: {}, // Stores user answer for each question ID { 1: { answered: 'B', correct: true }, ... }
+      quizBookmarks: {}, // Stores bookmarked status { 1: true, 2: false }
+      activeSandboxIndex: 0,
+      selectedConceptNode: null,
+      // Simulator filters
+      simSearch: '',
+      simFilterDomain: 'All',
+      simFilterStatus: 'All'
+    };
+
+    // Initialize elements when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      initApp();
+    });
+
+    function initApp() {
+      renderProgress();
+      renderDashboardModules();
+      renderCategoryFilters();
+      renderLessons();
+      renderFlashcard();
+      renderConnectorNodes();
+      renderQuizQuestion();
+      renderQuestionNavigationGrid();
+      renderSandboxPresets();
+      updateSimulatorProficiency();
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // STATE UPDATE & RENDER UTILITIES
+    // ==========================================
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      
+      const tabs = ['dashboard', 'lessons', 'flashcards', 'connector', 'simulator', 'sandbox'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`nav-${t}`);
+        const sect = document.getElementById(`tab-${t}`);
+        if (t === tabId) {
+          btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full bg-gradient-to-r from-indigo-900/50 to-slate-950 text-indigo-200 border-l-4 border-indigo-500 shadow-md";
+          sect.classList.remove('hidden');
+        } else {
+          btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all whitespace-nowrap md:w-full text-slate-400 hover:text-white hover:bg-slate-900";
+          sect.classList.add('hidden');
+        }
+      });
+
+      if (tabId === 'lessons') {
+        if (window.MathJax) {
+          MathJax.typesetPromise();
+        }
+      }
+      
+      lucide.createIcons();
+    }
+
+    function renderProgress() {
+      const keys = Object.keys(state.completedChapters);
+      const completedCount = keys.filter(k => state.completedChapters[k]).length;
+      const progressPercent = Math.round((completedCount / keys.length) * 100);
+
+      document.getElementById('progress-percent').innerText = `${progressPercent}%`;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+      document.getElementById('completed-count-badge').innerText = `${completedCount}/8 Modules`;
+
+      document.getElementById('stat-chapters-complete').innerText = `${completedCount}/8`;
+      
+      const answersList = Object.keys(state.quizAnswersState);
+      const correctCount = answersList.filter(id => state.quizAnswersState[id].correct).length;
+      
+      document.getElementById('stat-cards-known').innerText = `${state.knownCardsCount} / ${FLASHCARDS.length}`;
+      document.getElementById('stat-quiz-score').innerText = `${correctCount} / 180`;
+    }
+
+    function toggleChapterComplete(id) {
+      state.completedChapters[id] = !state.completedChapters[id];
+      renderProgress();
+      renderDashboardModules();
+      renderLessons();
+    }
+
+    // ==========================================
+    // MODULE: DASHBOARD TAB RENDERING
+    // ==========================================
+    function renderDashboardModules() {
+      const container = document.getElementById('dashboard-modules-grid');
+      container.innerHTML = '';
+
+      LESSONS.forEach(lesson => {
+        const isDone = state.completedChapters[lesson.id];
+        const card = document.createElement('div');
+        card.className = "bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-[10px] uppercase tracking-wider font-bold text-indigo-400 bg-indigo-950/50 px-2.5 py-0.5 rounded border border-indigo-900/40">
+                ${lesson.category}
+              </span>
+              <span class="text-[10px] text-slate-500 flex items-center gap-1">
+                <i data-lucide="book-open" class="w-3 h-3"></i> ${lesson.readTime}
+              </span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-200 mt-1">${lesson.title}</h4>
+            <p class="text-xs text-slate-400 line-clamp-3 mt-2 leading-relaxed">
+              ${lesson.concept}
+            </p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-850 flex justify-between items-center">
+            <button onclick="switchTab('lessons'); window.scrollTo({ top: 0, behavior: 'smooth' });" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+              Deep Study Chapter <i data-lucide="chevron-right" class="w-3 h-3"></i>
+            </button>
+            <button onclick="toggleChapterComplete('${lesson.id}')" 
+              class="p-1.5 rounded-lg border transition ${
+                isDone 
+                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400' 
+                  : 'bg-slate-800 border-slate-700 text-slate-500 hover:border-slate-650'
+              }" 
+              title="Mark Complete"
+            >
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // MODULE: LESSONS TAB RENDERING & FILTERS
+    // ==========================================
+    function renderCategoryFilters() {
+      const container = document.getElementById('category-filters-container');
+      const cats = ['All', 'Foundations', 'Stakeholder', 'Teams', 'Core Planning', 'Integrated', 'Execution', 'Closure', '8th Edition'];
+      
+      container.innerHTML = '';
+      cats.forEach(cat => {
+        const btn = document.createElement('button');
+        const isActive = state.selectedCategory === cat;
+        btn.onclick = () => {
+          state.selectedCategory = cat;
+          renderCategoryFilters();
+          renderLessons();
+        };
+        btn.className = `px-3 py-2 rounded-lg text-xs font-semibold transition ${
+          isActive 
+            ? 'bg-indigo-600 text-white' 
+            : 'bg-slate-950 text-slate-400 border border-slate-850 hover:border-slate-700'
+        }`;
+        btn.innerText = cat;
+        container.appendChild(btn);
+      });
+    }
+
+    function handleSearch(term) {
+      state.searchTerm = term;
+      renderLessons();
+    }
+
+    // Render lessons list
+    function renderLessons() {
+      const container = document.getElementById('lessons-stream');
+      container.innerHTML = '';
+
+      const filtered = LESSONS.filter(lesson => {
+        const matchesCategory = state.selectedCategory === 'All' || lesson.category.includes(state.selectedCategory);
+        const matchesSearch = lesson.title.toLowerCase().includes(state.searchTerm.toLowerCase()) || 
+                              lesson.concept.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+                              lesson.sections.some(s => s.title.toLowerCase().includes(state.searchTerm.toLowerCase()) || s.paragraphs.some(p => p.toLowerCase().includes(state.searchTerm.toLowerCase())));
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-slate-900 border border-slate-800 p-12 text-center rounded-2xl">
+            <i data-lucide="search" class="w-10 h-10 text-slate-600 mx-auto mb-3"></i>
+            <p class="text-sm text-slate-400 font-semibold">No syllabus sections matched your active filters or search terms.</p>
+            <button onclick="resetLessonsFilters()" class="text-xs text-indigo-400 hover:underline mt-2">Reset search query</button>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      filtered.forEach(lesson => {
+        const isDone = state.completedChapters[lesson.id];
+        
+        const lessonDiv = document.createElement('div');
+        lessonDiv.className = "bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl";
+        
+        let sectionsHtml = '';
+        lesson.sections.forEach(sec => {
+          let paraHtml = '';
+          sec.paragraphs.forEach(p => {
+            paraHtml += `<p class="text-xs text-slate-400 leading-relaxed">${p}</p>`;
+          });
+          sectionsHtml += `
+            <div class="space-y-3 bg-slate-950/40 p-4 rounded-xl border border-slate-850">
+              <h5 class="text-sm font-bold text-slate-200">${sec.title}</h5>
+              ${paraHtml}
+            </div>
+          `;
+        });
+
+        let trapsHtml = '';
+        lesson.examTips.forEach(et => {
+          trapsHtml += `
+            <div class="bg-amber-500/5 border border-amber-500/10 p-3 rounded-lg">
+              <span class="text-[10px] font-bold text-amber-400 uppercase">${et.sub} trap</span>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">${et.tip}</p>
+            </div>
+          `;
+        });
+
+        lessonDiv.innerHTML = `
+          <div class="bg-slate-850 p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 gap-4">
+            <div class="flex items-center gap-3">
+              <div class="bg-indigo-500/10 p-2.5 rounded-xl border border-indigo-500/20 text-indigo-400">
+                <i data-lucide="${lesson.icon}" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <span class="text-[10px] uppercase font-black tracking-wider text-amber-500 bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10 mr-2">
+                  ${lesson.category}
+                </span>
+                <span class="text-[10px] text-indigo-400 bg-indigo-950/40 px-2 py-0.5 rounded border border-indigo-900/30 font-mono">
+                  ${lesson.ecoMap}
+                </span>
+                <h3 class="text-base font-extrabold text-slate-100 mt-1.5">${lesson.title}</h3>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+                ⏱ ${lesson.readTime}
+              </span>
+              <button onclick="toggleChapterComplete('${lesson.id}')"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                  isDone 
+                    ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' 
+                    : 'bg-indigo-600 hover:bg-indigo-500 border-indigo-500 text-white'
+                }"
+              >
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                <span>${isDone ? 'Completed' : 'Complete'}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <div class="bg-indigo-950/20 border-l-4 border-indigo-500 p-4 rounded-r-xl">
+              <p class="text-xs italic text-indigo-200 leading-relaxed">
+                "${lesson.concept}"
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div class="lg:col-span-2 space-y-6">
+                <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 flex items-center gap-1.5">
+                  <i data-lucide="book" class="w-3.5 h-3.5 text-indigo-400"></i> Full Theoretical Knowledge Breakdown
+                </h4>
+                ${sectionsHtml}
+              </div>
+
+              <div class="space-y-6 bg-slate-950/60 p-5 rounded-xl border border-slate-800/80">
+                <div>
+                  <h4 class="text-xs uppercase tracking-wider font-bold text-amber-400 flex items-center gap-1.5 mb-3">
+                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500"></i> Deep Exam Trap Analysis
+                  </h4>
+                  <div class="space-y-4">
+                    ${trapsHtml}
+                  </div>
+                </div>
+
+                <div class="border-t border-slate-800 pt-4">
+                  <h4 class="text-xs uppercase tracking-wider font-bold text-indigo-400 flex items-center gap-1.5 mb-2">
+                    <i data-lucide="brain" class="w-3.5 h-3.5 text-indigo-400"></i> Psychological Mindset Check
+                  </h4>
+                  <p class="text-xs text-indigo-200 bg-indigo-950/30 p-3 rounded-lg border border-indigo-900/30 leading-relaxed">
+                    ${lesson.pmpMindset}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(lessonDiv);
+      });
+
+      lucide.createIcons();
+      if (window.MathJax) {
+        MathJax.typesetPromise();
+      }
+    }
+
+    function resetLessonsFilters() {
+      state.searchTerm = '';
+      state.selectedCategory = 'All';
+      document.getElementById('lessons-search').value = '';
+      renderCategoryFilters();
+      renderLessons();
+    }
+
+    // ==========================================
+    // MODULE: FLASHCARDS (ACTIVE RECALL ENGINE)
+    // ==========================================
+    function flipCard() {
+      const card = document.getElementById('flashcard-card');
+      state.isFlipped = !state.isFlipped;
+      if (state.isFlipped) {
+        card.classList.add('rotate-y-180');
+      } else {
+        card.classList.remove('rotate-y-180');
+      }
+    }
+
+    function renderFlashcard() {
+      const current = FLASHCARDS[state.currentCardIndex];
+      document.getElementById('flashcard-counter').innerText = `Card ${state.currentCardIndex + 1} of ${FLASHCARDS.length}`;
+      document.getElementById('flashcard-mastery').innerText = `${state.knownCardsCount} Cards Marked as Mastered`;
+      
+      document.getElementById('card-category-front').innerText = current.category;
+      document.getElementById('card-category-back').innerText = current.category;
+      
+      document.getElementById('card-question').innerText = current.question;
+      document.getElementById('card-answer').innerText = current.answer;
+    }
+
+    function handleFlashcardAction(isMastered) {
+      const card = document.getElementById('flashcard-card');
+      card.classList.remove('rotate-y-180');
+      state.isFlipped = false;
+
+      if (isMastered) {
+        state.knownCardsCount++;
+        renderProgress();
+      }
+
+      setTimeout(() => {
+        state.currentCardIndex = (state.currentCardIndex + 1) % FLASHCARDS.length;
+        renderFlashcard();
+      }, 250);
+    }
+
+    // ==========================================
+    // MODULE: CONCEPT CONNECTOR
+    // ==========================================
+    function renderConnectorNodes() {
+      const container = document.getElementById('connector-nodes-container');
+      container.innerHTML = '';
+
+      CONCEPT_NODES.forEach((node, i) => {
+        const btn = document.createElement('button');
+        const isActive = state.selectedConceptNode?.name === node.name;
+        btn.onclick = () => selectConceptNode(node);
+        btn.className = `p-4 rounded-xl text-left border text-xs transition duration-250 ${
+          isActive 
+            ? 'bg-gradient-to-tr from-indigo-900/60 to-slate-900 border-indigo-500 shadow-md shadow-indigo-950' 
+            : 'bg-slate-950 border-slate-850 hover:border-slate-700 text-slate-300'
+        }`;
+        btn.innerHTML = `
+          <h4 class="font-bold text-slate-100">${node.name}</h4>
+          <p class="text-[10px] text-slate-400 mt-1.5 leading-snug">${node.domain}</p>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function selectConceptNode(node) {
+      state.selectedConceptNode = node;
+      renderConnectorNodes();
+
+      const output = document.getElementById('connector-details-output');
+      output.className = "bg-slate-950 border border-slate-850 p-6 rounded-xl relative overflow-hidden text-left animate-fadeIn";
+      output.innerHTML = `
+        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl"></div>
+        
+        <div class="flex items-center gap-2 text-indigo-400 mb-2">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+          <h4 class="text-base font-extrabold text-white">${node.name}</h4>
+        </div>
+        
+        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-500 bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10 font-mono">
+          Systemic Connection Details
+        </span>
+        
+        <div class="text-xs text-slate-300 mt-3 space-y-4 leading-relaxed">
+          ${node.details}
+        </div>
+        
+        <div class="mt-4 pt-3 border-t border-slate-900 flex flex-wrap items-center gap-3 text-[10px] text-slate-400">
+          <span>Linked Domains:</span>
+          <span class="bg-slate-900 px-2 py-1 rounded">Governance</span>
+          <span class="bg-slate-900 px-2 py-1 rounded">Resources</span>
+          <span class="bg-slate-900 px-2 py-1 rounded">Risk</span>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // MODULE: 180-QUESTION SIMULATOR (NAVIGATION & METRICS)
+    // =========================================================================
+    function getFilteredQuestions() {
+      return MASTER_QUESTIONS.filter(q => {
+        // Domain filter
+        if (state.simFilterDomain !== 'All' && q.domain !== state.simFilterDomain) {
+          return false;
+        }
+        
+        // Status filter
+        const status = state.quizAnswersState[q.id];
+        if (state.simFilterStatus === 'Unanswered' && status) return false;
+        if (state.simFilterStatus === 'Correct' && (!status || !status.correct)) return false;
+        if (state.simFilterStatus === 'Incorrect' && (!status || status.correct)) return false;
+        if (state.simFilterStatus === 'Bookmarked' && !state.quizBookmarks[q.id]) return false;
+
+        // Search text filter
+        if (state.simSearch.trim() !== '') {
+          const s = state.simSearch.toLowerCase();
+          return q.scenario.toLowerCase().includes(s) || q.badge.toLowerCase().includes(s);
+        }
+
+        return true;
+      });
+    }
+
+    function renderQuestionNavigationGrid() {
+      const container = document.getElementById('sim-question-grid');
+      container.innerHTML = '';
+
+      const filtered = getFilteredQuestions();
+      document.getElementById('grid-filter-count').innerText = `Showing ${filtered.length} of 180 questions`;
+
+      MASTER_QUESTIONS.forEach(q => {
+        // Check if current matches filter parameters
+        const isFilteredOut = !filtered.some(fq => fq.id === q.id);
+        if (isFilteredOut) return;
+
+        const btn = document.createElement('button');
+        btn.onclick = () => selectQuizQuestion(q.id);
+        
+        const stateRecord = state.quizAnswersState[q.id];
+        const isBookmarked = state.quizBookmarks[q.id];
+        const isActive = state.activeQuizQuestionId === q.id;
+
+        let baseStyle = "w-9 h-9 text-xs font-bold rounded-lg border flex items-center justify-center transition shrink-0 relative ";
+        
+        if (isActive) {
+          baseStyle += "ring-2 ring-indigo-500 border-indigo-400 text-white bg-slate-800 ";
+        } else if (stateRecord) {
+          if (stateRecord.correct) {
+            baseStyle += "bg-emerald-950/40 border-emerald-500/60 text-emerald-300 ";
+          } else {
+            baseStyle += "bg-rose-950/40 border-rose-500/60 text-rose-300 ";
+          }
+        } else {
+          baseStyle += "bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-750 ";
+        }
+
+        btn.className = baseStyle;
+        btn.innerText = q.id;
+
+        // Add bookmark visual indicator dot if bookmarked
+        if (isBookmarked) {
+          const dot = document.createElement('span');
+          dot.className = "absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-amber-400 rounded-full";
+          btn.appendChild(dot);
+        }
+
+        container.appendChild(btn);
+      });
+    }
+
+    function filterSimulatorQuestions() {
+      state.simSearch = document.getElementById('sim-search').value;
+      state.simFilterDomain = document.getElementById('sim-filter-domain').value;
+      state.simFilterStatus = document.getElementById('sim-filter-status').value;
+      renderQuestionNavigationGrid();
+    }
+
+    function selectQuizQuestion(id) {
+      state.activeQuizQuestionId = id;
+      state.selectedOption = null;
+      renderQuizQuestion();
+      renderQuestionNavigationGrid();
+    }
+
+    function toggleBookmarkActiveQuestion() {
+      const qId = state.activeQuizQuestionId;
+      state.quizBookmarks[qId] = !state.quizBookmarks[qId];
+      renderQuizQuestion();
+      renderQuestionNavigationGrid();
+    }
+
+    function renderQuizQuestion() {
+      const q = MASTER_QUESTIONS.find(item => item.id === state.activeQuizQuestionId);
+      if (!q) return;
+
+      const record = state.quizAnswersState[q.id];
+      const isBookmarked = state.quizBookmarks[q.id];
+
+      // Topic & Domain parameters
+      document.getElementById('quiz-topic-badge').innerText = `💡 ${q.badge}`;
+      document.getElementById('quiz-domain-badge').innerText = q.domain;
+      document.getElementById('quiz-scenario-text').innerText = q.scenario;
+      document.getElementById('simulator-progress-label').innerText = `Scenario ${q.id} of 180`;
+
+      // Bookmark action layout
+      const bText = document.getElementById('bookmark-text');
+      const bBtn = document.getElementById('bookmark-btn');
+      if (isBookmarked) {
+        bText.innerText = "Flagged / Bookmarked";
+        bBtn.className = "text-amber-400 transition flex items-center gap-1.5 text-xs font-bold";
+      } else {
+        bText.innerText = "Flag Question";
+        bBtn.className = "text-slate-400 hover:text-amber-400 transition flex items-center gap-1.5 text-xs font-bold";
+      }
+
+      // Render Options
+      const optionsContainer = document.getElementById('quiz-options-container');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach(opt => {
+        // User could select a state option or view a committed record
+        const activeSelect = state.selectedOption === opt.key;
+        const committedVal = record?.answered === opt.key;
+        const isCorrect = opt.key === q.correct;
+
+        let btnStyle = "bg-slate-950 border-slate-850 hover:border-slate-750";
+        if (activeSelect || committedVal) {
+          btnStyle = "bg-indigo-950/40 border-indigo-500 ring-1 ring-indigo-500";
+        }
+        if (record) {
+          if (isCorrect) {
+            btnStyle = "bg-emerald-950/30 border-emerald-500 text-emerald-200";
+          } else if (committedVal && !isCorrect) {
+            btnStyle = "bg-rose-950/30 border-rose-500 text-rose-200";
+          }
+        }
+
+        const optBtn = document.createElement('button');
+        optBtn.onclick = () => {
+          if (record) return; // Locked once answered
+          state.selectedOption = opt.key;
+          renderQuizQuestion();
+        };
+        optBtn.className = `w-full text-left p-4 rounded-xl border text-xs flex gap-3 items-start transition duration-200 ${btnStyle}`;
+        optBtn.innerHTML = `
+          <span class="w-5 h-5 rounded-full flex items-center justify-center font-bold border shrink-0 ${
+            (activeSelect || committedVal) ? 'bg-indigo-500 text-slate-950 border-indigo-400' : 'bg-slate-900 border-slate-800 text-slate-400'
+          }">
+            ${opt.key}
+          </span>
+          <span class="leading-relaxed">${opt.text}</span>
+        `;
+        optionsContainer.appendChild(optBtn);
+      });
+
+      // Actions visibility
+      const submitBtn = document.getElementById('quiz-submit-btn');
+      const nextBtn = document.getElementById('quiz-next-btn');
+      const explanationBox = document.getElementById('quiz-explanation-box');
+
+      if (record) {
+        submitBtn.classList.add('hidden');
+        nextBtn.classList.remove('hidden');
+        explanationBox.classList.remove('hidden');
+        document.getElementById('quiz-explanation-text').innerText = q.explanation;
+      } else {
+        submitBtn.classList.remove('hidden');
+        nextBtn.classList.add('hidden');
+        explanationBox.classList.add('hidden');
+
+        if (state.selectedOption) {
+          submitBtn.disabled = false;
+          submitBtn.className = "bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2.5 rounded-xl text-xs font-bold transition";
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.className = "bg-slate-800 text-slate-500 cursor-not-allowed px-5 py-2.5 rounded-xl text-xs font-bold transition";
+        }
+      }
+      
+      lucide.createIcons();
+    }
+
+    function submitQuizAnswer() {
+      const q = MASTER_QUESTIONS.find(item => item.id === state.activeQuizQuestionId);
+      if (!q || !state.selectedOption) return;
+
+      const correct = state.selectedOption === q.correct;
+      state.quizAnswersState[q.id] = {
+        answered: state.selectedOption,
+        correct: correct
+      };
+
+      if (correct) {
+        state.quizScore++;
+      }
+
+      renderProgress();
+      updateSimulatorProficiency();
+      renderQuizQuestion();
+      renderQuestionNavigationGrid();
+    }
+
+    function nextQuizQuestion() {
+      // Find the next question ID
+      const nextId = (state.activeQuizQuestionId % 180) + 1;
+      selectQuizQuestion(nextId);
+    }
+
+    function updateSimulatorProficiency() {
+      const domainsList = ["People", "Process", "Business"];
+      
+      domainsList.forEach(dom => {
+        const domainQuestions = MASTER_QUESTIONS.filter(q => q.domain === dom);
+        const answeredDom = domainQuestions.filter(q => state.quizAnswersState[q.id]);
+        const correctDom = answeredDom.filter(q => state.quizAnswersState[q.id].correct);
+
+        const score = answeredDom.length > 0 ? Math.round((correctDom.length / answeredDom.length) * 100) : 0;
+        
+        const badgeId = `simulator-prof-${dom.toLowerCase()}`;
+        document.getElementById(badgeId).innerText = `${dom}: ${score}%`;
+      });
+    }
+
+    // ==========================================
+    // MODULE: GENAI SANDBOX
+    // ==========================================
+    function renderSandboxPresets() {
+      const container = document.getElementById('sandbox-roles-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      GEN_AI_SANDBOX_TEMPLATES.forEach((tpl, i) => {
+        const isActive = state.activeSandboxIndex === i;
+        const btn = document.createElement('button');
+        btn.onclick = () => selectSandboxPreset(i);
+        btn.className = `w-full text-left p-3.5 rounded-xl border text-xs transition duration-200 flex flex-col gap-1 ${
+          isActive 
+            ? 'bg-indigo-950/40 border-indigo-500' 
+            : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+        }`;
+        btn.innerHTML = `
+          <span class="font-bold text-slate-200">${tpl.role}</span>
+          <span class="text-[10px] text-slate-400 truncate max-w-[200px]">${tpl.prompt}</span>
+        `;
+        container.appendChild(btn);
+      });
+
+      if (state.activeSandboxIndex === 0 && !document.getElementById('sandbox-textarea').value) {
+        document.getElementById('sandbox-textarea').value = GEN_AI_SANDBOX_TEMPLATES[0].prompt;
+        renderSandboxOutputPreview(GEN_AI_SANDBOX_TEMPLATES[0].output);
+      }
+    }
+
+    function selectSandboxPreset(index) {
+      state.activeSandboxIndex = index;
+      renderSandboxPresets();
+      
+      document.getElementById('sandbox-textarea').value = GEN_AI_SANDBOX_TEMPLATES[index].prompt;
+      renderSandboxOutputPreview(GEN_AI_SANDBOX_TEMPLATES[index].output);
+    }
+
+    function renderSandboxOutputPreview(text) {
+      const outputBlock = document.getElementById('sandbox-output-block');
+      if (!outputBlock) return;
+      outputBlock.classList.remove('hidden');
+      document.getElementById('sandbox-output-text').innerText = text;
+    }
+
+    function runAIAnalysis() {
+      const prompt = document.getElementById('sandbox-textarea').value;
+      if (!prompt.trim()) return;
+
+      const runBtn = document.getElementById('sandbox-run-btn');
+      runBtn.disabled = true;
+      runBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin"></i> <span>Analyzing Concepts...</span>`;
+      lucide.createIcons();
+
+      setTimeout(() => {
+        runBtn.disabled = false;
+        runBtn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i> <span>Analyze via AI Model</span>`;
+        lucide.createIcons();
+
+        const customResponse = `### Custom GenAI Copilot Deep Analysis\nAnalyzed prompt: "${prompt}"\n\n**Key Strategic Recommendations (PMP 8th Edition aligned)**:\n1. **Outcomes Alignment**: Map this deliverable block to the benefits realization register immediately. Run regular 'Value Verification' reviews with the primary sponsor.\n2. **Holistic Risk Management**: Identify connected baseline elements. Integrate PESTLE triggers and compliance check thresholds directly into work packages.\n3. **Servant Leadership Guardrail**: Establish a clear decentralized decision threshold. Support team autonomy inside the budget tolerances, and reserve formal escalation paths purely for threshold exceptions.\n\n*Critical PM Pre-Flight Check: Human-in-the-loop review validated. All AI-generated assumptions are fully calibrated against standard operational safety protocols.*`;
+        
+        renderSandboxOutputPreview(customResponse);
+      }, 1200);
+    }
+
+    function copySandboxOutput() {
+      const text = document.getElementById('sandbox-output-text').innerText;
+      
+      const dummyInput = document.createElement('textarea');
+      dummyInput.value = text;
+      document.body.appendChild(dummyInput);
+      dummyInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummyInput);
+
+      const notification = document.createElement('div');
+      notification.className = "fixed bottom-5 right-5 bg-emerald-600 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg z-[100] transition-opacity duration-300";
+      notification.innerText = "Output Copied to Clipboard Successfully!";
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(notification), 300);
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

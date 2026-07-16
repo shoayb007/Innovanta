@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMBOK&reg; 8th Edition &mdash; Complete Architecture Study Chapter</title>
+<style>
+/* ============================================================
+   PMBOK Study Guide — Design Tokens
+   Palette continues the navy/gold identity from the companion
+   slide deck; typography pairs Fraunces (editorial serif, real
+   character) with Inter (high legibility for long-form reading).
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --navy: #1B2A56;
+  --navy-deep: #121C3C;
+  --navy-mid: #24346A;
+  --ice: #CADCFC;
+  --ice-tint: #EEF3FC;
+  --gold: #DE9F3C;
+  --gold-deep: #B87F27;
+  --gold-soft: #F6E4C4;
+  --text: #1F2540;
+  --text-muted: #5B6584;
+  --white: #FFFFFF;
+  --card: #F7F9FC;
+  --border: #DEE4F2;
+  --trap: #B4453B;
+  --trap-tint: #FBEBE9;
+  --hook-tint: #FBF1E0;
+
+  --serif: 'Fraunces', Cambria, Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --sidebar-w: 320px;
+  --content-max: 820px;
+}
+
+*,*::before,*::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible{
+  outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px;
+}
+body{
+  margin:0;
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.65;
+}
+
+/* ---------------- Progress bar ---------------- */
+.progress-bar{
+  position: fixed; top:0; left:0; height:3px; width:0%;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+  z-index: 1000; transition: width .08s linear;
+}
+
+/* ---------------- Layout ---------------- */
+.layout{ display:flex; min-height:100vh; }
+
+.sidebar{
+  position: fixed; top:0; left:0; bottom:0; width: var(--sidebar-w);
+  background: var(--navy); color: var(--ice);
+  z-index: 500;
+  border-right: 1px solid var(--navy-deep);
+  overflow: hidden;
+}
+.sidebar-nav{
+  display:flex; flex-direction:column; height:100%; min-height:0;
+}
+.sidebar-brand{
+  font-family: var(--serif); font-weight:600; font-size: 1.15rem; color: var(--white);
+  padding: 1.6rem 1.4rem 1rem; letter-spacing: .01em; flex-shrink:0;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:.5rem;
+}
+.sidebar-close{
+  display:none; flex-shrink:0;
+  width:30px; height:30px; border-radius:8px; border:1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.06); color: var(--gold); font-size:1rem; line-height:1;
+  cursor:pointer; align-items:center; justify-content:center;
+}
+.sidebar-brand sup{ color: var(--gold); font-size: .6em; }
+.sidebar-brand span{ display:block; font-family: var(--sans); font-weight:500; font-size:.72rem;
+  color: var(--gold); text-transform: uppercase; letter-spacing: .14em; margin-top:.35rem; }
+
+.nav-search{
+  margin: 0 1.4rem 1rem; padding: .55rem .8rem; flex-shrink:0;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px; color: var(--white); font-family: var(--sans); font-size: .85rem;
+  outline: none;
+}
+.nav-search::placeholder{ color: rgba(202,220,252,.55); }
+.nav-search:focus{ border-color: var(--gold); background: rgba(255,255,255,.1); }
+
+.nav-scroll{ flex:1 1 auto; min-height:0; overflow-y:auto; padding: 0 .9rem 1.6rem; overscroll-behavior: contain; }
+
+.sidebar-footer{
+  flex-shrink:0;
+  display:flex; align-items:center; gap:.65rem;
+  padding: .85rem 1.4rem;
+  border-top: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.12);
+  text-decoration:none;
+  transition: background .15s ease;
+}
+.sidebar-footer:hover{ background: rgba(0,0,0,.22); }
+.sidebar-footer:hover .sidebar-footer-text strong{ color: var(--gold); }
+.sidebar-footer-logo{
+  width: 30px; height:30px; flex-shrink:0; display:block;
+}
+.sidebar-footer-text{
+  font-family: var(--sans); font-size: .74rem; line-height:1.3; color: rgba(202,220,252,.8);
+  display:flex; flex-direction:column;
+}
+.sidebar-footer-text strong{
+  color: var(--white); font-size: .86rem; font-weight:700; transition: color .15s ease;
+}
+.nav-scroll::-webkit-scrollbar{ width:7px; }
+.nav-scroll::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.18); border-radius:4px; }
+
+.nav-toplink{
+  display:block; margin: 0 .5rem 1rem; padding: .5rem .5rem;
+  color: var(--ice); text-decoration:none; font-size:.85rem; font-weight:600;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.nav-toplink:hover{ color: var(--gold); }
+
+.nav-group{ margin-bottom: .35rem; }
+.nav-part-link{
+  display:flex; flex-direction:column; gap:.15rem;
+  padding: .55rem .5rem; border-radius: 8px;
+  color: var(--white); text-decoration:none; font-size: .88rem; font-weight:600;
+  transition: background .15s ease, color .15s ease;
+}
+.nav-eyebrow{ font-size:.66rem; font-weight:700; letter-spacing:.12em; color: var(--gold); text-transform:uppercase; }
+.nav-part-link:hover{ background: rgba(255,255,255,.08); }
+.nav-part-link.active{ background: rgba(222,159,60,.18); color: var(--gold); }
+.nav-part-link.active .nav-eyebrow{ color: var(--gold); }
+
+.nav-sub{ list-style:none; margin:.15rem 0 .6rem; padding-left: .95rem; border-left: 1px solid rgba(255,255,255,.12); }
+.nav-sub li{ margin: 0; }
+.nav-sub a{
+  display:block; padding: .32rem .55rem; margin-left: .1rem;
+  color: rgba(202,220,252,.82); text-decoration:none; font-size: .79rem; line-height:1.4;
+  border-radius: 6px;
+}
+.nav-sub a:hover{ color: var(--white); background: rgba(255,255,255,.06); }
+.nav-sub a.active{ color: var(--gold); font-weight:600; background: rgba(222,159,60,.12); }
+
+/* ---------------- Content ---------------- */
+.content{
+  margin-left: var(--sidebar-w);
+  flex:1; min-width:0;
+  padding: 2.4rem clamp(1.2rem, 4vw, 4rem) 6rem;
+}
+
+.toolbar{
+  position: sticky; top:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.6rem;
+  background: rgba(255,255,255,.9); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+  padding: .7rem 0; margin-bottom: 1.6rem;
+}
+.toolbar-left, .toolbar-right{ display:flex; align-items:center; gap:.5rem; }
+.tool-btn{
+  font-family: var(--sans); font-size: .78rem; font-weight:600;
+  border: 1px solid var(--border); background: var(--white); color: var(--navy);
+  padding: .45rem .8rem; border-radius: 999px; cursor:pointer;
+  transition: all .15s ease;
+}
+.tool-btn:hover{ border-color: var(--gold-deep); color: var(--gold-deep); }
+.tool-btn-primary{ background: var(--navy); color: var(--white); border-color: var(--navy); }
+.tool-btn-primary:hover{ background: var(--navy-mid); color: var(--white); }
+.read-time{ font-size: .78rem; color: var(--text-muted); font-weight:500; }
+
+.prose{ max-width: var(--content-max); margin: 0 auto; }
+
+/* ---------------- Hero / preamble ---------------- */
+.prose > h1:first-of-type{
+  font-family: var(--serif); font-weight:700; font-size: clamp(2rem, 4vw, 2.7rem);
+  color: var(--navy); line-height:1.15; margin: 0 0 .5rem;
+}
+.prose > h2:first-of-type{
+  font-family: var(--sans); font-weight:600; font-size: 1.15rem; color: var(--gold-deep);
+  margin: 0 0 1.5rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--border);
+}
+
+/* ---------------- Callouts ---------------- */
+.callout{
+  border-radius: 14px; padding: 1.1rem 1.3rem 1.2rem; margin: 1.4rem 0;
+  background: var(--card);
+}
+.callout-head{ display:flex; align-items:center; gap:.55rem; margin-bottom:.5rem; }
+.callout-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width: 1.9rem; height:1.9rem; border-radius:50%; font-size: 1rem;
+  background: var(--white);
+}
+.callout-label{ font-size: .72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+.callout p{ margin: .3rem 0 0; }
+.callout-intro{ background: var(--ice-tint); }
+.callout-intro .callout-label{ color: var(--navy); }
+.callout-trap{ background: var(--trap-tint); }
+.callout-trap .callout-label{ color: var(--trap); }
+.callout-hook{ background: var(--hook-tint); }
+.callout-hook .callout-label{ color: var(--gold-deep); }
+
+/* ---------------- Collapsible Parts ---------------- */
+details.part{
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin: 1.8rem 0;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(27,42,86,.04);
+  scroll-margin-top: 5.5rem;
+}
+details.part > summary{
+  list-style: none; cursor: pointer; user-select:none;
+  display:flex; align-items:center; gap: .9rem;
+  padding: 1.1rem 1.4rem;
+  background: var(--navy);
+  color: var(--white);
+}
+details.part > summary::-webkit-details-marker{ display:none; }
+.part-eyebrow{
+  font-family: var(--sans); font-size:.72rem; font-weight:800; letter-spacing:.12em;
+  text-transform: uppercase; color: var(--gold);
+  background: rgba(255,255,255,.08); padding:.3rem .6rem; border-radius:999px; flex-shrink:0;
+}
+.part-title{
+  font-family: var(--serif); font-weight:600; font-size: 1.18rem; flex:1;
+}
+.part-chevron{
+  width: 10px; height:10px; flex-shrink:0;
+  border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold);
+  transform: rotate(45deg); transition: transform .2s ease; margin-right:.2rem;
+}
+details.part[open] > summary .part-chevron{ transform: rotate(-135deg); }
+.part-body{ padding: .3rem 1.6rem 1.6rem; }
+
+/* headings inside part body */
+.part-body h2{
+  font-family: var(--serif); font-weight:600; font-size: 1.42rem; color: var(--navy);
+  margin: 2.1rem 0 .8rem; scroll-margin-top: 5.5rem;
+  padding-top: .2rem;
+}
+.part-body h2:first-child{ margin-top: 1.4rem; }
+.part-body h3{
+  font-family: var(--sans); font-weight:700; font-size: 1.03rem; color: var(--gold-deep);
+  margin: 1.6rem 0 .6rem; scroll-margin-top: 5.5rem;
+}
+.part-body h4{
+  font-family: var(--sans); font-weight:700; font-size: .92rem; color: var(--navy);
+  margin: 1.2rem 0 .4rem;
+}
+.part-body p{ margin: .7rem 0; color: var(--text); }
+.part-body ul, .part-body ol{ margin: .6rem 0; padding-left: 1.3rem; }
+.part-body li{ margin: .35rem 0; }
+.part-body li::marker{ color: var(--gold-deep); }
+.part-body strong{ color: var(--navy); font-weight:700; }
+.part-body em{ color: var(--text-muted); }
+.part-body a{ color: var(--gold-deep); text-decoration: underline; text-decoration-color: var(--gold-soft); }
+.part-body hr{ border:none; border-top: 1px solid var(--border); margin: 1.8rem 0; }
+
+/* generic prose (preamble) elements outside parts */
+.prose > ul, .prose > ol{ padding-left: 1.3rem; }
+.prose > p{ color: var(--text); }
+
+/* ---------------- Tables ---------------- */
+.table-scroll{ overflow-x: auto; margin: 1.3rem 0; border-radius: 12px; border: 1px solid var(--border); }
+table{
+  border-collapse: collapse; width: 100%; font-size: .88rem;
+  background: var(--white);
+}
+thead th{
+  background: var(--navy); color: var(--white); text-align:left;
+  font-family: var(--sans); font-weight:700; font-size: .78rem; letter-spacing:.03em;
+  padding: .7rem .9rem; white-space: nowrap;
+}
+tbody td{ padding: .65rem .9rem; border-top: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even){ background: var(--card); }
+tbody tr:hover{ background: var(--ice-tint); }
+
+/* ---------------- Code / ASCII diagrams ---------------- */
+pre{
+  background: var(--navy-deep); color: var(--ice);
+  padding: 1.1rem 1.3rem; border-radius: 12px; overflow-x:auto;
+  font-family: var(--mono); font-size: .82rem; line-height:1.6;
+  margin: 1.3rem 0;
+}
+code{ font-family: var(--mono); }
+p code, li code{
+  background: var(--ice-tint); color: var(--navy);
+  padding: .1rem .35rem; border-radius: 5px; font-size: .85em;
+}
+
+/* ---------------- Footer ---------------- */
+.doc-footer{
+  max-width: var(--content-max); margin: 3rem auto 0; padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: .82rem; color: var(--text-muted); text-align:center;
+}
+
+/* ---------------- Floating controls ---------------- */
+.back-to-top{
+  position: fixed; right: 1.6rem; bottom: 1.6rem; z-index: 400;
+  width: 46px; height: 46px; border-radius: 50%; border:none;
+  background: var(--navy); color: var(--gold); font-size: 1.2rem; cursor:pointer;
+  box-shadow: 0 6px 18px rgba(18,28,60,.3);
+  opacity:0; visibility:hidden; transform: translateY(8px);
+  transition: all .25s ease;
+}
+.back-to-top.visible{ opacity:1; visibility:visible; transform: translateY(0); }
+.back-to-top:hover{ background: var(--navy-mid); }
+
+.menu-toggle{
+  display:none; position: fixed; top: .8rem; left: .8rem; z-index: 600;
+  width: 42px; height:42px; border-radius: 10px; border:none;
+  background: var(--navy); cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.menu-toggle span{ display:block; width:20px; height:2px; background: var(--gold); border-radius:2px; }
+.sidebar-overlay{ display:none; position: fixed; inset:0; background: rgba(18,28,60,.5); z-index:490; }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 980px){
+  :root{ --sidebar-w: min(320px, 82vw); }
+  .menu-toggle{ display:flex; }
+  .sidebar{ transform: translateX(-100%); transition: transform .25s ease; box-shadow: 8px 0 24px rgba(0,0,0,.25); }
+  .sidebar.open{ transform: translateX(0); }
+  .sidebar-overlay.open{ display:block; }
+  .sidebar-close{ display:flex; }
+  .content{ margin-left:0; padding-top: 3.6rem; }
+  .toolbar{ top:0; }
+}
+@media (max-width: 560px){
+  .part-body{ padding: .2rem 1.05rem 1.2rem; }
+  details.part > summary{ padding: .9rem 1.05rem; flex-wrap:wrap; }
+  .part-title{ font-size: 1.05rem; }
+  thead th, tbody td{ padding: .55rem .6rem; font-size:.82rem; }
+}
+
+/* ---------------- Print ---------------- */
+@media print{
+  .sidebar, .menu-toggle, .toolbar, .back-to-top, .progress-bar, .sidebar-overlay{ display:none !important; }
+  .content{ margin-left:0; padding: 0; }
+  details.part > .part-body{ display:block !important; }
+  details.part{ break-inside: avoid-page; border: none; box-shadow:none; }
+  details.part > summary{ background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a{ color: var(--text) !important; text-decoration: none; }
+  .callout, table, pre{ break-inside: avoid-page; }
+}
+
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav" aria-label="Table of contents">
+<div class="sidebar-brand">PMBOK<sup>®</sup> 8th Ed.<span>Study Chapter</span><button class="sidebar-close" id="sidebarClose" aria-label="Close menu">✕</button></div>
+<input type="search" id="navSearch" class="nav-search" placeholder="Search sections…" aria-label="Search sections">
+<div class="nav-scroll">
+<a href="#top" class="nav-toplink">Introduction</a>
+<div class="nav-group">
+<a href="#part-1" class="nav-part-link"><span class="nav-eyebrow">Part 1</span>FOUNDATIONAL ELEMENTS</a>
+<ul class="nav-sub">
+<li><a href="#11-what-a-project-is-and-the-value-system-it-sits-inside">1.1 What a Project Is (and the Value System It Sits Inside)</a></li>
+<li><a href="#12-the-project-environment-factors-that-influence-everything-else">1.2 The Project Environment — Factors That Influence Everything Else</a></li>
+<li><a href="#13-functions-associated-with-projects-the-work-regardless-of-who-does-it">1.3 Functions Associated with Projects — The Work, Regardless of Who Does It</a></li>
+<li><a href="#14-project-management-roles">1.4 Project Management Roles</a></li>
+<li><a href="#15-governance-recap-with-the-factor-lens">1.5 Governance — Recap With the Factor Lens</a></li>
+<li><a href="#16-operations-portfolio-program-project-recap-with-interaction-lens">1.6 Operations, Portfolio, Program, Project — Recap With Interaction Lens</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-2" class="nav-part-link"><span class="nav-eyebrow">Part 2</span>THE PROJECT MANAGEMENT MINDSET</a>
+<ul class="nav-sub">
+<li><a href="#21-components">2.1 Components</a></li>
+<li><a href="#22-factors-that-shape-adoption-of-the-mindset">2.2 Factors That Shape Adoption of the Mindset</a></li>
+<li><a href="#23-how-the-components-interact">2.3 How the Components Interact</a></li>
+<li><a href="#24-how-you-know-its-working">2.4 How You Know It’s Working</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-3" class="nav-part-link"><span class="nav-eyebrow">Part 3</span>THE SIX PRINCIPLES (Full Structure)</a>
+<ul class="nav-sub">
+<li><a href="#31-adopt-a-holistic-view">3.1 Adopt a Holistic View</a></li>
+<li><a href="#32-focus-on-value">3.2 Focus on Value</a></li>
+<li><a href="#33-embed-quality-into-processes-and-deliverables">3.3 Embed Quality Into Processes and Deliverables</a></li>
+<li><a href="#34-be-an-accountable-leader">3.4 Be an Accountable Leader</a></li>
+<li><a href="#35-integrate-sustainability-within-all-project-areas">3.5 Integrate Sustainability Within All Project Areas</a></li>
+<li><a href="#36-build-an-empowered-culture">3.6 Build an Empowered Culture</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-4" class="nav-part-link"><span class="nav-eyebrow">Part 4</span>PERFORMANCE DOMAINS (The Full Mechanics)</a>
+<ul class="nav-sub">
+<li><a href="#41-governance-performance-domain">4.1 Governance Performance Domain</a></li>
+<li><a href="#42-scope-performance-domain-includes-quality">4.2 Scope Performance Domain (includes Quality)</a></li>
+<li><a href="#43-schedule-performance-domain">4.3 Schedule Performance Domain</a></li>
+<li><a href="#44-finance-performance-domain">4.4 Finance Performance Domain</a></li>
+<li><a href="#45-stakeholders-performance-domain">4.5 Stakeholders Performance Domain</a></li>
+<li><a href="#46-resources-performance-domain">4.6 Resources Performance Domain</a></li>
+<li><a href="#47-risk-performance-domain">4.7 Risk Performance Domain</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-5" class="nav-part-link"><span class="nav-eyebrow">Part 5</span>TAILORING (The "How Do We Know / What Factors" Chapter)</a>
+<ul class="nav-sub">
+<li><a href="#51-why-tailor">5.1 Why Tailor?</a></li>
+<li><a href="#52-what-can-be-tailored-three-aspects">5.2 What Can Be Tailored (Three Aspects)</a></li>
+<li><a href="#53-the-tailoring-process-four-steps-structure">5.3 The Tailoring Process — Four Steps (Structure)</a></li>
+<li><a href="#54-tailoring-the-performance-domains">5.4 Tailoring the Performance Domains</a></li>
+<li><a href="#55-diagnostics-how-you-actually-know-tailoring-is-working">5.5 Diagnostics — How You Actually Know Tailoring Is Working</a></li>
+<li><a href="#56-summary">5.6 Summary</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-6" class="nav-part-link"><span class="nav-eyebrow">Part 6</span>FOCUS AREAS (Full Detail, All Five)</a>
+<ul class="nav-sub">
+<li><a href="#61-what-they-are-and-why-they-replaced-process-groups">6.1 What They Are and Why They Replaced “Process Groups”</a></li>
+<li><a href="#62-each-focus-area-with-its-components-and-key-benefit">6.2 Each Focus Area, With Its Components and Key Benefit</a></li>
+<li><a href="#63-focus-areas-as-a-whole-how-they-interact">6.3 Focus Areas as a Whole — How They Interact</a></li>
+<li><a href="#64-how-you-know-focus-areas-are-working">6.4 How You Know Focus Areas Are Working</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-7" class="nav-part-link"><span class="nav-eyebrow">Part 7</span>PROJECT LIFE CYCLES (Full Detail)</a>
+<ul class="nav-sub">
+<li><a href="#71-components">7.1 Components</a></li>
+<li><a href="#72-phases-and-gates-structure">7.2 Phases and Gates — Structure</a></li>
+<li><a href="#73-development-approaches-full-selection-logic">7.3 Development Approaches — Full Selection Logic</a></li>
+<li><a href="#74-delivery-cadence">7.4 Delivery Cadence</a></li>
+<li><a href="#75-how-you-know-the-life-cycle-choice-is-working">7.5 How You Know the Life Cycle Choice Is Working</a></li>
+</ul>
+</div>
+<div class="nav-group">
+<a href="#part-8" class="nav-part-link"><span class="nav-eyebrow">Part 8</span>THE FULL SYSTEM, TIED TOGETHER</a>
+</div>
+<div class="nav-group">
+<a href="#part-9" class="nav-part-link"><span class="nav-eyebrow">Part 9</span>WHAT YOU MAY HAVE MISSED</a>
+</div>
+</div>
+<a class="sidebar-footer" href="https://innovanta.one/" target="_blank" rel="noopener noreferrer"><img class="sidebar-footer-logo" src="data:image/png;base64,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" alt="Innovanta One logo"><span class="sidebar-footer-text">Prepared by<strong>Innovanta One</strong></span></a>
+</nav>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="content" id="top">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button id="expandAll" class="tool-btn">Expand all</button>
+        <button id="collapseAll" class="tool-btn">Collapse all</button>
+      </div>
+      <div class="toolbar-right">
+        <span id="readTime" class="read-time"></span>
+        <button id="printBtn" class="tool-btn tool-btn-primary">🖨 Print / Save PDF</button>
+      </div>
+    </div>
+
+    <article class="prose">
+      <h1 id="the-complete-architecture-of-project-management">The Complete Architecture of Project Management</h1>
+<h2 id="a-structured-study-chapter-foundational-elements-mindset-principles-performance-domains-focus-areas-life-cycles">A Structured Study Chapter: Foundational Elements → Mindset → Principles → Performance Domains → Focus Areas → Life Cycles</h2>
+<div class="callout callout-intro">
+<div class="callout-head"><span class="callout-icon">📖</span><span class="callout-label">About This Chapter</span></div>
+<p>Grounded in <em>The Standard for Project Management</em> and <em>A Guide to the Project Management Body of Knowledge (PMBOK® Guide) — 8th Edition</em>. This chapter goes deeper than a summary: for every element it identifies <strong>what it is, what factors influence it, what its components are, how those components interact, and how you know it is working (or not)</strong>. Where the earlier study notes and slide deck condensed content for exam recall, this chapter restores the full architecture so you understand the system, not just the vocabulary.</p>
+</div>
+<hr/>
+<h2 id="how-this-chapter-is-organized">How This Chapter Is Organized</h2>
+<p>Six layers, and they nest inside one another like Russian dolls:</p>
+<pre><code>MINDSET (beliefs &amp; habits)
+   → expressed through → PRINCIPLES (6 actionable guides)
+        → operationalized in → PERFORMANCE DOMAINS (7 areas of work, ~40 processes)
+             → sequenced through → FOCUS AREAS (5 universal actions: Initiating…Closing)
+                  → paced by → LIFE CYCLE (phases + development approach + delivery cadence)
+                       → all of it reshaped per project by → TAILORING (why/what/how + diagnostics)
+</code></pre>
+<p>Every layer answers the same four questions, which is the spine of this chapter:
+1. <strong>What is it, and what are its components?</strong>
+2. <strong>What factors influence or shape it?</strong>
+3. <strong>How do the components interact — with each other and across layers?</strong>
+4. <strong>How do you know it’s working?</strong> (the diagnostic signal — outcomes, checks, or symptoms of failure)</p>
+<p>A fifth section at the end, <strong>“What You May Have Missed,”</strong> flags PMBOK content that a condensed exam-prep pass typically leaves out but that a serious practitioner should own.</p>
+<hr/>
+<details class="part" id="part-1" open="open">
+<summary><span class="part-eyebrow">Part 1</span><span class="part-title">FOUNDATIONAL ELEMENTS</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<h2 id="11-what-a-project-is-and-the-value-system-it-sits-inside">1.1 What a Project Is (and the Value System It Sits Inside)</h2>
+<h3 id="components">Components</h3>
+<p>A <strong>project</strong> = <strong>Temporary</strong> + <strong>Unique context</strong> + <strong>Value through organisational change</strong>. A project moves an organisation from a <strong>current state</strong>, sometimes through a <strong>transition state</strong>, to a <strong>future state</strong> — and it ends when objectives are achieved, when a governing body/sponsor/team decides they cannot be met, when resources are exhausted, when the need disappears, or for legal/regulatory reasons.</p>
+<p>But a project never exists alone. PMBOK situates it inside a <strong>System for Value Delivery</strong>, which has five components you must be able to name:
+1. <strong>Creating Value</strong> — how projects produce value or enhance value-production capability.
+2. <strong>Project Environment</strong> — the internal/external factors that influence projects (EEFs, OPAs).
+3. <strong>Product Management Considerations</strong> — how portfolios, programs, projects, and products relate.
+4. <strong>Functions Associated with Projects</strong> — the work that must happen regardless of who does it.
+5. <strong>Project Management Roles</strong> — the people who typically perform those functions.</p>
+<h3 id="what-is-value-precisely">What Is “Value,” Precisely?</h3>
+<p><strong>Business value</strong> is a net quantifiable benefit — tangible or intangible — contributing to organisational health during, at the end of, or after a project.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Tangible</th>
+<th>Intangible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Monetary assets, productivity, profitability, stockholder equity, market share, infrastructure capability, utility, environmental improvements</td>
+<td>Goodwill, brand recognition/trademarks, public benefit, acquired knowledge, compliance, reputation, employee well-being, environmental awareness</td>
+</tr>
+</tbody>
+</table></div>
+<p>Projects meet or exceed value thresholds by: creating a new product/service/result that meets customer needs; delivering within the performance baseline; contributing to community development, sustainability, and ethical responsibility; improving efficiency/productivity/employee well-being; enabling transition to a future state; or sustaining benefits from prior programs/projects/operations.</p>
+<h3 id="how-the-value-delivery-systems-components-interact">How the Value Delivery System’s Components Interact</h3>
+<p><strong>Portfolio management</strong> is the central framework linking strategy to execution — it optimises resource use to maximise value across programs, projects, products, and operations. <strong>Operations</strong> support and influence portfolios/programs/projects (and run essential functions like payroll and supply chain) while portfolios, programs, projects, and products <strong>dynamically shape one another</strong>.</p>
+<p>The chain of cause and effect is: <strong>deliverables → outcomes → benefits → value.</strong>
+- An <strong>outcome</strong> is the end result or consequence of a process or project.
+- Outcomes create <strong>benefits</strong> (positive effects) and sometimes <strong>disbenefits</strong> (negative consequences/losses).
+- Benefits create <strong>value</strong> — something of worth, importance, or usefulness.
+- Because every project is an investment, its expected value (financial or not) must meet or exceed a target threshold to justify the investment.</p>
+<p>This system “works most effectively when information and feedback are shared consistently among all components” — senior leadership sets strategy and desired outcomes/benefits/value; portfolios pass performance information up and deliverables with support/maintenance information down to operations; operations feed back information for updates, fixes, and adjustments. <strong>Break that feedback loop, and the whole system drifts out of alignment with strategy.</strong></p>
+<h3 id="how-you-know-its-working-assessing-project-success">How You Know It’s Working: Assessing Project Success</h3>
+<p>PMBOK insists success has <strong>two independent dimensions</strong> — a project can succeed on one and fail on the other:</p>
+<ol>
+<li><strong>Success of project outcomes</strong> — did the project realise the intended value (financial and non-financial: sales targets, ROI, new customers, first-to-market, compliance, sustainability goals)? Value may be realised during, immediately after, or long after completion.</li>
+<li><strong>Success of project management processes</strong> — was it delivered on time, on budget, to required scope/quality standards?</li>
+</ol>
+<div class="callout callout-trap">
+<div class="callout-head"><span class="callout-icon">⚖️</span><span class="callout-label">Exam Trap</span></div>
+</div>
+<ul>
+<li><strong>Sydney Opera House</strong> — budget blew from AUS$7M to AUS$102M and construction took 14 years instead of 4 (a <strong>management failure</strong>), yet it’s now a UNESCO World Heritage site drawing 10.9M visitors/year (an <strong>outcome success</strong>).</li>
+<li><strong>Montreal’s Highway 15 overpass (2016)</strong> — a well-managed, on-time, on-budget construction (a <strong>management success</strong>) had to be demolished a year later because it didn’t align with an adjacent bridge redevelopment (an <strong>outcome failure</strong>).</li>
+</ul>
+<p><strong>Takeaway:</strong> don’t grade a project on process efficiency alone, and don’t excuse poor management discipline just because the outcome eventually paid off — track both dimensions separately.</p>
+<h2 id="12-the-project-environment-factors-that-influence-everything-else">1.2 The Project Environment — Factors That Influence Everything Else</h2>
+<p>This is the PMBOK section that most directly answers “what factors impact the foundational elements.” Two categories of influence:</p>
+<h3 id="enterprise-environmental-factors-eefs">Enterprise Environmental Factors (EEFs)</h3>
+<p>Conditions <strong>not directly controlled by the project team</strong> that constrain or direct the project — inputs to nearly every planning process.</p>
+<p><strong>Internal EEFs:</strong>
+- Organisational culture, structure, and governance (vision, mission, values, leadership styles, hierarchy, ethics)
+- Geographic distribution of facilities and resources
+- Infrastructure (facilities, equipment, IT hardware/capacity)
+- Information technology systems (task/cost/scheduling tools, configuration management, work authorisation systems)
+- Resource availability (contracting/purchasing constraints, staffing levels, collaboration agreements)
+- Employee capability (existing expertise, skills, competencies)
+- Financial capability of the organisation (funding options, available capital)</p>
+<p><strong>External EEFs:</strong>
+- Marketplace conditions (competitors, customer behaviour, market share, brand)
+- Social/cultural influences (political climate, codes of conduct, perceptions)
+- Legal restrictions (laws and regulations on data protection, employment, procurement)
+- Academic research (industry studies, benchmarking, emerging trends)
+- Government/industry standards (regulatory requirements on products, safety, quality)
+- Financial considerations (exchange rates, interest rates, inflation, tariffs, taxes)
+- Physical environmental elements (working conditions, weather, geopolitics)
+- Emerging technologies (AI, automation, blockchain, IoT)
+- Public health and safety regulations</p>
+<h3 id="organisational-process-assets-opas">Organisational Process Assets (OPAs)</h3>
+<p>Internal plans, processes, documents, templates, and knowledge that <strong>influence how the project is managed</strong> — and unlike EEFs, project teams can often update them. Two categories:</p>
+<ol>
+<li><strong>Policies, processes, and procedures</strong> — usually set by the PMO or a function outside the project; updated only through organisational policy. Includes: tailoring guidelines; product/project life cycle methods; templates (PM plans, risk registers, stakeholder registers); pre-approved supplier lists and contract templates; progress-monitoring procedures; change-control procedures; traceability matrices; issue/defect management processes; resource-assignment policies; work-authorisation processes; verification/validation processes; SLAs; closure guidelines.</li>
+<li><strong>Organisational knowledge repositories</strong> — updated <em>throughout</em> the project: configuration management repositories, financial data repositories, historical/lessons-learned repositories, issue/defect data, metrics repositories, and project files from prior projects (schedules, risk registers, stakeholder registers).</li>
+</ol>
+<div class="callout callout-hook">
+<div class="callout-head"><span class="callout-icon">🧠</span><span class="callout-label">Memory Hook</span></div>
+<p>EEFs are the weather you fly through (given); OPAs are the instruments and logbook in your cockpit (yours to use and update).</p>
+</div>
+<h3 id="organisational-structures-a-direct-driver-of-governance-factors">Organisational Structures — A Direct Driver of Governance Factors</h3>
+<p>There is <strong>no one-size-fits-all structure</strong>. The choice depends on organisational size, industry, geography, strategic objectives, and project complexity, and it directly determines the project manager’s authority:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Structure</th>
+<th>PM Authority</th>
+<th>PM Role</th>
+<th>Resource Availability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Organic/simple</td>
+<td>Low</td>
+<td>Part-time, may not be a designated role</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Functional (centralised)</td>
+<td>Low</td>
+<td>Part-time</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Multidivisional</td>
+<td>Low</td>
+<td>Part-time</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Matrix — weak</td>
+<td>Low</td>
+<td>Part-time, embedded in a function</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Matrix — balanced</td>
+<td>Low to moderate</td>
+<td>Part-time</td>
+<td>Low to moderate</td>
+</tr>
+<tr>
+<td>Matrix — strong</td>
+<td>Moderate to high</td>
+<td>Full-time, designated role</td>
+<td>Moderate to high</td>
+</tr>
+<tr>
+<td>Project-oriented</td>
+<td>High to almost total</td>
+<td>Full-time</td>
+<td>High to almost total</td>
+</tr>
+<tr>
+<td>Virtual/network</td>
+<td>Low to moderate</td>
+<td>Full-time or part-time</td>
+<td>Low to moderate</td>
+</tr>
+<tr>
+<td>Hybrid</td>
+<td>Mixed</td>
+<td>Mixed</td>
+<td>Mixed</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout callout-trap">
+<div class="callout-head"><span class="callout-icon">⚖️</span><span class="callout-label">Exam Trap</span></div>
+<p>the structure isn’t just an org-chart detail — it is a <em>governing constraint</em> on how much authority, budget, and resource control a PM actually has, independent of their skill.</p>
+</div>
+<h2 id="13-functions-associated-with-projects-the-work-regardless-of-who-does-it">1.3 Functions Associated with Projects — The Work, Regardless of Who Does It</h2>
+<p>People drive delivery by performing functions — via an individual, a team, or a mix. Coordination itself can be <strong>decentralised</strong> (self-organising teams, common in adaptive projects), <strong>centralised</strong> (a designated PM, common in predictive projects), or <strong>hybrid</strong>. Seven functions, tailored to the project’s needs:</p>
+<ol>
+<li><strong>Provide Oversight and Coordination</strong> — aligning effort, removing obstacles, consulting with executives; performed by PMs or Scrum Masters.</li>
+<li><strong>Solicit and Manage Feedback</strong> — collecting stakeholder/customer/end-user input; more critical in adaptive/hybrid work due to ambiguity.</li>
+<li><strong>Facilitate and Support</strong> — building consensus, resolving conflict, supporting people through change (PMs, Scrum Masters, team leads, business analysts, change managers).</li>
+<li><strong>Perform Work</strong> — delivering the knowledge/skills/experience that produce outputs; increasingly assisted by automation and AI.</li>
+<li><strong>Apply Expertise</strong> — specialised knowledge to improve accuracy/quality and spot blind spots.</li>
+<li><strong>Provide Organisational Direction and Insight</strong> — prioritising scope by value/dependency/risk (portfolio managers, sponsors, product owners).</li>
+<li><strong>Provide Resources</strong> — securing funding, people, and authority (sponsors, functional/resource managers).</li>
+</ol>
+<h2 id="14-project-management-roles">1.4 Project Management Roles</h2>
+<p>The <strong>project management team</strong> (a PM alone, or a team) guides delivery from initiation through closing, and sometimes into post-project benefit analysis — tailored to the organisation just like processes are. Other core roles: <strong>Sponsor/Customer/Product Owner</strong> (owns the business case, secures funding, guides direction), <strong>Project Team</strong> (does the work), and <strong>End Users and Other Key Stakeholders</strong> (use or are affected by the deliverable).</p>
+<h2 id="15-governance-recap-with-the-factor-lens">1.5 Governance — Recap With the Factor Lens</h2>
+<ul>
+<li><strong>Organisational governance</strong>: direction/control for the whole organisation (executive-owned).</li>
+<li><strong>Project governance</strong>: an adaptable framework for one project (RACI, decision models) — “right-sized,” not maximised.</li>
+<li><strong>Threshold vs. Tolerance</strong>: tolerance = acceptable variation band; threshold = the trigger line requiring escalation.</li>
+<li><strong>Phase gates</strong>: continue / continue with modification / end / remain / repeat / park — can sit at the start (pre-phase gate) or end of a phase.</li>
+</ul>
+<h2 id="16-operations-portfolio-program-project-recap-with-interaction-lens">1.6 Operations, Portfolio, Program, Project — Recap With Interaction Lens</h2>
+<p>Operations = ongoing, repetitive, no defined end. Projects intersect operations at development/upgrade points, at end-of-product-life, and at each closeout/iteration — with <strong>deliverables, people, and knowledge transferring at the hand-off</strong>. Engage operations early; it materially improves outcome sustainment.</p>
+<p><strong>Hierarchy interactions:</strong> Portfolios, programs, projects, and operations “often engage with the same stakeholders and may compete for the same resources” — portfolio/program/project managers must coordinate with operations leaders or strategic objectives are threatened. A program is not a big project — its job is <strong>coordinated benefit realisation</strong> other projects can’t achieve alone.</p>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-2" open="open">
+<summary><span class="part-eyebrow">Part 2</span><span class="part-title">THE PROJECT MANAGEMENT MINDSET</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<h2 id="21-components">2.1 Components</h2>
+<p>Three dimensions, each powered by two of the six principles:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Powered by</th>
+<th>Core behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Proactive</strong></td>
+<td>Holistic View + Embed Quality</td>
+<td>Systems thinking, appropriate planning, quality embedded every phase</td>
+</tr>
+<tr>
+<td><strong>Ownership</strong></td>
+<td>Accountable Leader + Empowered Culture</td>
+<td>Leadership as accountability + collaboration, not just decision rights</td>
+</tr>
+<tr>
+<td><strong>Value-Driven</strong></td>
+<td>Focus on Value + Sustainability</td>
+<td>Maximise value while honouring the triple bottom line (people/profit/planet)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="22-factors-that-shape-adoption-of-the-mindset">2.2 Factors That Shape Adoption of the Mindset</h2>
+<p>The mindset is explicitly framed as a response to environmental pressure: <em>“This integrated mindset is essential in today’s complex and rapidly changing business environment that should balance diverse customer needs and consider the increasing need for — and importance of — sustainability.”</em> In other words, the mindset itself is a <strong>response to EEFs</strong> — market volatility, stakeholder diversity, and sustainability expectations are what make a reactive/output-only mindset insufficient.</p>
+<h2 id="23-how-the-components-interact">2.3 How the Components Interact</h2>
+<p>The mindset is not three silos — it’s an integrated framework: proactive planning and embedded quality (Proactive) create the conditions under which an accountable, empowered team (Ownership) can pursue value and sustainability (Value-Driven) without needing to sacrifice one for another. PMI states plainly that performance domains are how <strong>“this mindset is translated into effective practices and outcomes”</strong> — i.e., the mindset has no observable existence except through the principles and the domains. You cannot audit a “mindset” directly; you audit its downstream behaviours.</p>
+<h2 id="24-how-you-know-its-working">2.4 How You Know It’s Working</h2>
+<p>There’s no direct metric for “mindset,” but its absence shows up as symptomatic patterns you can diagnose:
+- Proactive missing → recurring firefighting, quality caught late (not shift-left), teams surprised by foreseeable risks.
+- Ownership missing → decisions bottlenecked on one person, blame-shifting, low psychological safety, disengaged team agreements.
+- Value-Driven missing → scope delivered exactly as specified but adoption/usage is low; sustainability treated as an afterthought or unfunded.</p>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-3" open="open">
+<summary><span class="part-eyebrow">Part 3</span><span class="part-title">THE SIX PRINCIPLES (Full Structure)</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<p>Each principle in PMBOK follows an identical four-part anatomy — <strong>definition → project impact → principle in action → connected performance domains.</strong> That structure <em>is</em> the answer to “how does each principle work and interact with the rest of the system,” so it’s reproduced faithfully below, in condensed form, for all six.</p>
+<h2 id="31-adopt-a-holistic-view">3.1 Adopt a Holistic View</h2>
+<ul>
+<li><strong>What it is:</strong> manage the project as an interconnected system (systems thinking); see patterns, not snapshots.</li>
+<li><strong>Impact:</strong> better strategic alignment; traces problems to root cause; enables interdisciplinary, innovative solutions.</li>
+<li><strong>Connected domains:</strong> supported by <strong>all seven</strong> — it’s the integrative principle.</li>
+<li><strong>Working signal:</strong> decisions consistently reference upstream/downstream effects rather than being made in domain isolation.</li>
+</ul>
+<h2 id="32-focus-on-value">3.2 Focus on Value</h2>
+<ul>
+<li><strong>What it is:</strong> continually evaluate/adjust alignment to business objectives; “value per unit of investment is the ultimate indicator of project success.”</li>
+<li><strong>Impact:</strong> shifts attention from deliverables to intended <strong>outcomes</strong> — a deliverable that doesn’t enable its outcome undermines the value proposition and can become net-harmful given the investment.</li>
+<li><strong>In action:</strong> choosing a simplified, adoption-friendly solution over a feature-maximised one because it better matches organisational culture.</li>
+<li><strong>Connected domains:</strong> all — governance “right-sized,” not bureaucratic; scope controlled against creep/gold-plating; schedule managed to protect the value window; finance assessed continuously against the business case; stakeholders engaged around desired outcomes; resources redirected (e.g., cross-training) when value is threatened; risk approached pragmatically.</li>
+<li><strong>Working signal:</strong> the project can be — and sometimes is — recommended for termination when it clearly won’t deliver value; that recommendation is itself evidence the principle is alive.</li>
+</ul>
+<h2 id="33-embed-quality-into-processes-and-deliverables">3.3 Embed Quality Into Processes and Deliverables</h2>
+<ul>
+<li><strong>What it is:</strong> consistent focus on target quality thresholds in <strong>both</strong> deliverable and process, measured via acceptance criteria, definition of done, fitness for use, and efficiency.</li>
+<li><strong>Impact:</strong> faster delivery with less rework; better team morale; reduced environmental impact from rework.</li>
+<li><strong>Quality dimensions (know all nine):</strong> performance, conformity, reliability, resilience, satisfaction, uniformity, efficiency, sustainability, compliance.</li>
+<li><strong>Foundational practices:</strong> continuous improvement + waste elimination; “shift-left” — prioritise quality as early as possible.</li>
+<li><strong>Connected domains:</strong> strongest tie to <strong>Scope</strong> (quality lives inside the Scope domain in the 8th edition — there is no standalone Quality domain); also governance (transparency/accountability), schedule (quality milestones), finance (avoided rework cost), stakeholders (feedback loop), resources (skilled people/right tools), risk (quality-risk anticipation).</li>
+<li><strong>Working signal:</strong> defect/rework rates trend down over time, not just pass/fail at the end.</li>
+</ul>
+<h2 id="34-be-an-accountable-leader">3.4 Be an Accountable Leader</h2>
+<ul>
+<li><strong>What it is:</strong> guide with integrity, make responsible decisions, foster psychological safety; accountability = owning the outcome of accepted work.</li>
+<li><strong>Characteristics:</strong> integrity/honesty/fairness; self-awareness; respectfulness/humility/availability (servant leadership); flexibility/adaptability; <strong>shared leadership</strong> — anyone can lead in the moment.</li>
+<li><strong>Leadership ≠ Authority:</strong> authority is positional; leadership is influence by example.</li>
+<li><strong>In action:</strong> resolving a cross-vendor shift-rotation conflict through root-cause discussion rather than pure contract enforcement.</li>
+<li><strong>Connected domains:</strong> strongest with <strong>Governance, Stakeholders, Risk</strong>.</li>
+<li><strong>Working signal:</strong> decisions and escalations are made by whoever is closest to the problem and best positioned to lead — not funnelled exclusively through one titled role.</li>
+</ul>
+<h2 id="35-integrate-sustainability-within-all-project-areas">3.5 Integrate Sustainability Within All Project Areas</h2>
+<ul>
+<li><strong>What it is:</strong> meet present needs without compromising future generations; PM, team, and sponsor are <strong>jointly accountable</strong>.</li>
+<li><strong>Triple bottom line:</strong> people, profit, planet.</li>
+<li><strong>Sustainability Pyramid (climb toward the top):</strong> Compensate/offset → Restore → Minimise → <strong>Avoid negative outcomes altogether</strong> (most desirable).</li>
+<li><strong>Impact:</strong> broadens time horizon and stakeholder set (can raise cost/complexity); creates sustainability-specific risk if ignored (cost prioritised over stewardship, community impact underestimated, compliance underestimated); success criteria are inherently harder to standardise, so each project needs a tailored approach.</li>
+<li><strong>Connected domains:</strong> most visible in <strong>Finance</strong> (may need funding but reduces long-term threat) and <strong>Risk</strong> (proactive mitigation of environmental/regulatory/societal risk; also opens innovation opportunities); also strengthens Governance, Scope, Stakeholders.</li>
+<li><strong>Working signal:</strong> sustainability KPIs appear in the charter/scope statement/business case/contracts and are actually monitored through planning, execution, and closure — not just mentioned once at kickoff.</li>
+</ul>
+<h2 id="36-build-an-empowered-culture">3.6 Build an Empowered Culture</h2>
+<ul>
+<li><strong>What it is:</strong> foster mutual trust and proactive collaboration, with clear roles, responsibilities, and team agreements; <em>“stakeholders determine the success of projects.”</em></li>
+<li><strong>Five enablers:</strong> diversity; process definition; interpersonal skills (initiative, integrity, collaboration, respect, empathy, confidence); knowledge of organisational structures; team agreements set at the start.</li>
+<li><strong>In action:</strong> including stakeholders from inception; giving remote/virtual teams the norms and space to collaborate and resolve conflict proactively.</li>
+<li><strong>Connected domains:</strong> relevant across all seven — governance (transparent channel with management), scope (calibrating to evolving needs), schedule (team ideas to accelerate/slow delivery), finance (reducing unplanned spend), stakeholders (defining engagement level), resources (restricting/enabling access appropriately), risk (defining thresholds and participating in response).</li>
+<li><strong>Working signal:</strong> the leader is removing obstacles and the team is self-organising — not being micromanaged. If a title-holder is making every call, the culture isn’t empowered yet, regardless of what’s written in the team charter.</li>
+</ul>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-4" open="open">
+<summary><span class="part-eyebrow">Part 4</span><span class="part-title">PERFORMANCE DOMAINS (The Full Mechanics)</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<p>Each of the seven performance domains has an <strong>identical five-part internal structure</strong> in the PMBOK Guide: <strong>Key Concepts → Processes → Tailoring Considerations → Interactions With Other Domains → Check Results (Outcomes).</strong> This structure is precisely the “how does it work, what are its components, how do they interact, how do you know it’s working” pattern you asked for — applied domain by domain below. Together the seven domains contain <strong>~40 named processes</strong> (confirmed against the Preface’s count) — all are listed.</p>
+<h2 id="41-governance-performance-domain">4.1 Governance Performance Domain</h2>
+<p><strong>What it is:</strong> the framework, functions, and processes that guide project decisions to optimise value delivery — holistic and integrative across all other domains.</p>
+<p><strong>Key concepts (the domain’s own diagnostic toolkit):</strong>
+- <strong>Leading indicators</strong> — signals of a future trend (e.g., backlog size, disengaged stakeholders, undefined success criteria) that let the team act <em>before</em> tolerance is breached. Preferred whenever possible.
+- <strong>Lagging indicators</strong> — measure what already happened (deliverables completed, schedule/cost variance, resources consumed); easier to measure but reactive; useful for finding correlations (e.g., schedule variance correlating with team dissatisfaction).
+- <strong>SMART criteria</strong> — Specific, Measurable, Achievable, Realistic, Time-bound goal-setting.
+- <strong>Sourcing strategy</strong> — insource vs. outsource decisions, weighing culture/skills/proximity against specialised-skill needs, scalability, risk profile, and value proposition; overseen by the project team and/or a procurement function.</p>
+<p><strong>Processes (9):</strong> Initiate Project or Phase · Integrate and Align Project Plans · Plan Sourcing Strategy · Manage Project Execution · Manage Quality Assurance · Manage Project Knowledge · Monitor and Control Project Performance · Assess and Implement Changes · Close Project or Phase.</p>
+<p><strong>Tailoring factors:</strong> organisational governance model in place; whether the project is guided by self-governance (common in adaptive projects) vs. formal PMO oversight; project life cycle stage; scale (e.g., a rapid-innovation project may adopt lightweight governance; a large multinational project may need to comply with varied regulatory regimes).</p>
+<p><strong>Interactions with other domains:</strong> interrelated with <strong>all</strong>, but Scope, Schedule, and Finance are the primary interaction points — because scope carries the project’s core value, schedule sensitivity affects the value proposition, and cost overruns/underruns are a governance-visible signal. Also connects to Stakeholders (ensuring engagement at the right time) and Resources (right resources, right priorities, right time) and Risk (aligning risk mitigation/opportunity-seizing with strategic objectives).</p>
+<p><strong>Check outcomes (sample — outcome → how you check it):</strong>
+- <em>Appropriate oversight exists</em> → teams understand and can point to documented, agreed-upon governance processes aligned with organisational artefacts.
+- <em>Governance processes are in place, effective, and improving</em> → teams show awareness of governance structure and act on it; compliance audits/checklists are used for predictive work; regular checklist use/timeboxing/meetings for adaptive work.
+- <em>Effective signalling mechanisms exist</em> → the team has selected and uses mechanisms aligned to how the project maximises value.
+- <em>Lessons learned are managed throughout</em> → knowledge is incorporated continuously, not only at project end.
+- <em>Key management stays informed</em> → project metrics are tracked regularly across status, resource needs, risks, assumptions, benefits realised, decision tracking, change control, compliance, and financial performance.</p>
+<h2 id="42-scope-performance-domain-includes-quality">4.2 Scope Performance Domain (includes Quality)</h2>
+<p><strong>What it is:</strong> ensures the project includes <em>all</em> required work and <em>only</em> required work, optimising cost/schedule to maximise value; also owns quality (meeting stakeholder expectations and product/project requirements).</p>
+<p><strong>Key concepts:</strong>
+- <strong>Business case</strong> — the documented economic feasibility study.
+- <strong>Project scope</strong> — the work performed to deliver the product/service/result; encapsulates the project’s expected value.
+- <strong>Requirement</strong> — a condition/capability necessary in the product to satisfy a business need.
+- <strong>Scope baseline</strong> — the approved formal scope documents (predictive), part of the performance measurement baseline (with schedule and cost baselines).
+- <strong>Work Breakdown Structure (WBS)</strong> — hierarchical decomposition for predictive/hybrid work.
+- <strong>Quality as a feature</strong> — quality is an <em>integral attribute</em> of scope.
+- <strong>Product scope</strong> — description of the features/functions of the product itself (distinct from project scope).
+- <strong>Value Breakdown Structure (VBS)</strong> — a hierarchy connecting project work to the value it generates.
+- <strong>Product backlog</strong> — dynamic, prioritised list of work items (adaptive).
+- <strong>Definition of Done (DoD)</strong> — the checklist a deliverable must satisfy to be considered ready.</p>
+<p><strong>Processes (6):</strong> Plan Scope Management · Elicit and Analyze Requirements · Define Scope · Develop Scope Structure · Monitor and Control Scope · Validate Scope.</p>
+<div class="callout callout-trap">
+<div class="callout-head"><span class="callout-icon">⚖️</span><span class="callout-label">Exam Trap</span></div>
+<p><em>Validate Scope</em> (customer formally accepts completed deliverables) is <strong>not</strong> the same as <em>Monitor and Control Scope</em> (managing changes to the baseline).</p>
+</div>
+<p><strong>Tailoring factors:</strong> dependency on external partners; environmental dynamism (highly dynamic environments need more frequent scope review); design-heavy industries (pharma, construction) that front-load scope definition; adaptive/hybrid life cycles that refine scope through backlog iteration.</p>
+<p><strong>Interactions with other domains:</strong> most directly with <strong>Schedule and Finance</strong> (any scope change ripples into both), and significantly with <strong>Risk and Stakeholders</strong>. Scope changes must be routed through governance structures (review/approval, budget/resource implications). Risk management is intrinsic to scope management — comprehensive risk analysis affects scope decisions, and <strong>rescoping</strong> is itself a risk-response strategy (to mitigate, avoid, or transfer risk).</p>
+<p><strong>Check outcomes (with actual formulas — memorise these):</strong>
+- <em>Effective change management</em> → predictive: a change log showing cross-domain impact assessment; adaptive: a backlog showing completion rate, new-scope rate, and stakeholder-feedback prioritisation.
+- <em>Clear requirements understanding</em> → predictive: few changes to initial requirements; adaptive: each iteration clearly and progressively refines short-term requirements (rolling wave).
+- <em>Alignment with business objectives</em> → business case + strategic plan + authorising documents all demonstrate alignment.
+- <em>Stakeholder satisfaction</em> → interviews/observation/end-user feedback; complaint and return rates.
+- <strong>Scope Definition Accuracy (%)</strong> = (Planned Scope Items Correctly Delivered / Total Planned Scope Items) × 100
+- <strong>Scope Creep (%)</strong> = (Unplanned Deliverables / Total Deliverables) × 100
+- <strong>Requirements Stability (%)</strong> = (Unchanged Requirements / Total Requirements) × 100
+- <em>Sustainability is considered in scope</em> → the WBS/backlog includes activities to manage sustainability impact (e.g., CO₂, biodiversity).</p>
+<h2 id="43-schedule-performance-domain">4.3 Schedule Performance Domain</h2>
+<p><strong>What it is:</strong> a plan for how and when the project delivers the scope — a communication tool, an expectation-management tool, and the basis for performance reporting; enables proactive delay/risk identification.</p>
+<p><strong>Key concepts:</strong> project schedule; estimate; schedule baseline; schedule flexibility (essential for adapting to change/risk); schedule forecasts; actual duration; project schedule network diagrams.</p>
+<p><strong>Processes (3):</strong> Plan Schedule Management · Develop Schedule · Monitor and Control Schedule.</p>
+<p><strong>Tailoring factors:</strong> predictive life cycle (schedule defined up front) vs. adaptive (flexible, divided into short cycles) vs. hybrid (combines both); compliance/criticality of the project; type of deliverable and technology involved; team size and geographic distribution; team experience; organisational culture (tolerance for uncertainty).</p>
+<p><strong>Interactions with other domains:</strong> tightly linked to <strong>Governance, Scope, Finance, Stakeholders, Resources, Risk</strong> — the interdependence is total: scope/cost/resources/quality all drive duration, and changes in Scope-Schedule-Finance ripple to each other directly, while Stakeholders/Resources/Risk are affected in parallel — all coordinated under Governance.</p>
+<p><strong>Check outcomes:</strong>
+- Scheduling approach matches the development approach chosen.
+- Life cycle phases connect value delivery start-to-finish with clear exit criteria.
+- The schedule is holistic — no gaps or misalignment.
+- Documentation is complete (dependencies, durations, resource allocations, milestones).
+- Appropriate tools/techniques are used (critical path method, PM software).
+- Stakeholders were actually involved in building the schedule (low involvement → unrealistic schedule).
+- Sufficient buffers exist for known-unknowns (float, contingency reserves, secondary plans).</p>
+<h2 id="44-finance-performance-domain">4.4 Finance Performance Domain</h2>
+<p><strong>What it is:</strong> planning, estimating, budgeting, financing, funding, managing, measuring, and controlling the monetary resources to optimise organisational value.</p>
+<p><strong>Key concepts:</strong> value definition (tangible/intangible strategies vary by organisation); <strong>value maximisation</strong> (not just cost minimisation); funding; financial constraints (budget is usually the primary one); project budget; cost baseline; reserves (to mitigate cost/schedule risk); cost management; cost measurement (different stakeholders measure cost differently).</p>
+<p><strong>Processes (4):</strong> Plan Financial Management · Estimate Costs · Develop Budget · Monitor and Control Finances.</p>
+<p><strong>Tailoring factors:</strong> product/industry regulation level (heavily regulated industries need more formal financial controls); development approach (iterative approaches change expenditure patterns); procurement strategy (make-or-buy decisions); how the organisation defines value; resource availability constraints.</p>
+<p><strong>Interactions with other domains:</strong> finance is “one of the key pillars” because it gates access to resources — it has a direct two-way relationship with <strong>Governance, Scope, and Schedule</strong>, and is also affected by <strong>Stakeholders and Risk</strong>. The overarching goal: connect financial results back to organisational strategy.</p>
+<p><strong>Check outcomes:</strong>
+- Contribution to business objectives/strategy → check ROI, NPV, IRR, cost-benefit analysis, KPIs, OKRs, CapEx/OpEx.
+- Completeness within/below budget → variance analysis via Cost Variance (CV) and Cost Performance Index (CPI); vendor contract performance.
+- Deliverables validated to plan → Earned Value Management (EVM) plus organisation-defined metrics.
+- Value created (investment or otherwise) → success metrics tied to defined success criteria.
+- Financial visibility achieved → trend analysis, graphical analysis, forecasting.</p>
+<h2 id="45-stakeholders-performance-domain">4.5 Stakeholders Performance Domain</h2>
+<p><strong>What it is:</strong> identification through monitored engagement across the whole life cycle; closely linked to communications management; core skills are negotiation and conflict management. <em>“Stakeholders determine the success of projects.”</em></p>
+<p><strong>Key concepts:</strong> stakeholder engagement; stakeholder satisfaction; team engagement (the team members are stakeholders too); communications management; data-driven decision-making; vendor/supplier management (procurement-adjacent).</p>
+<p><strong>Processes (7):</strong> Identify Stakeholders · Plan Stakeholder Engagement · Plan Communications Management · Manage Stakeholder Engagement · Manage Communications · Monitor Stakeholder Engagement · Monitor Communications.</p>
+<p><strong>Tailoring factors:</strong> organisational culture (a key driver for tailoring engagement style); type of product (interactive/incremental/exploratory products need more continuous feedback); the use of LLMs/AI in engagement and communication management.</p>
+<p><strong>Interactions with other domains:</strong> stakeholders “permeate all aspects of projects” — they define/prioritise requirements and scope, shape planning, and set acceptance/quality criteria; they can <em>reduce or increase</em> project uncertainty depending on whether they’re identified and engaged correctly. Strongest explicit ties: <strong>Governance</strong> (engaging governance bodies and leadership) and <strong>Finance</strong> (stakeholders often define budgets and financial controls).</p>
+<p><strong>Check outcomes:</strong>
+- Engagement maintained → feedback via interviews/surveys, periodic alignment checks, Net Promoter Score (NPS)-type indicators.
+- Risk responses identified and implemented → review issue log, risk register, stakeholder register.
+- Stakeholder agreement with objectives achieved → track change-request volume and increment feedback.
+- Communications management performed → the communications plan is reviewed periodically and tailored.
+- Plans integrated with supplier perspectives → the PM plan aligns with vendors’ ways of working.</p>
+<h2 id="46-resources-performance-domain">4.6 Resources Performance Domain</h2>
+<p><strong>What it is:</strong> how effectively and efficiently the team plans for and utilises resources — human <strong>and</strong> physical/virtual (equipment, materials, facilities, software, licences, information) — covering availability, utilisation, and maintenance.</p>
+<p><strong>Key concepts:</strong> project manager (leadership responsibility); resource manager (management authority over resource assignment); human resources (team members); physical/material/virtual resources.</p>
+<p><strong>Processes (5):</strong> Plan Resource Management · Estimate Resources · Acquire Resources · Lead the Team · Monitor and Control Resourcing.
+<em>(Lead the Team has two named sub-topics worth knowing: “Common Aspects of Team Development” and “High-Performing Project Teams.”)</em></p>
+<p><strong>Tailoring factors:</strong> development-approach choice shapes leadership style; maturity of project-team culture (especially across organisations); industry context (resource scarcity in some industries); organisational governance structures; sustainability considerations in resourcing decisions; team-member maturity; prevalence of virtual/global teams; emphasis on employee well-being/burnout prevention.</p>
+<p><strong>Interactions with other domains:</strong> interacts with <strong>all</strong> domains — Stakeholders, Resources, and Risk together define outcomes measured by schedule/cost/scope. Resource estimation is closely coordinated with <strong>cost estimation</strong> to keep the project financially viable. The PM’s central integrating job is leading the team to focus on what’s essential across all domains at once.</p>
+<p><strong>Check outcomes:</strong>
+- Shared ownership of the project → the whole team knows vision/objectives and owns outcomes.
+- A high-performing team is in place → trust, collaboration, adaptability, resilience, empowerment, recognition.
+- Effective resource utilisation → actual vs. planned usage tracked and managed.
+- Acceptable resource downtime → total downtime vs. total planned resource time.
+- Team productivity → units produced per hour worked, or cost of work performed vs. scheduled time; KPIs reviewed regularly.
+- Efficient management of physical/virtual resources → materials used, scrap, rework at acceptable levels.
+- Resource procurement conducted well → procurement, order, manufacture, and delivery tracking succeed.</p>
+<h2 id="47-risk-performance-domain">4.7 Risk Performance Domain</h2>
+<p><strong>What it is:</strong> builds project resilience through proactive risk management — anticipate, prepare for, respond to, and adapt to risks and disruptions, covering <strong>both threats and opportunities</strong>.</p>
+<p><strong>Key concepts:</strong> risk (uncertain event/condition, positive or negative); <strong>issue</strong> (a <em>current</em> condition already affecting the project — distinct from a risk); overall risk (portfolio/program/project-level aggregate effect of uncertainty); risk appetite (degree of uncertainty willingly accepted); risk threshold (acceptable variation trigger point); risk exposure (aggregate potential impact of all risks); risk response (planned/implemented action); project resilience (ability to absorb impact and recover quickly); ambiguity and uncertainty (distinct states — not knowing what to expect, vs. not knowing likelihood/outcome).</p>
+<p><strong>Processes (6):</strong> Plan Risk Management · Identify Risks · Perform Risk Analysis · Plan Risk Responses · Implement Risk Responses · Monitor Risks.</p>
+<p><strong>Tailoring factors:</strong> project size/complexity; organisational risk appetite and threshold; the need for a holistic view of risk impact/response; strategic importance of the project; development approach (predictive/adaptive/hybrid changes how risk is planned and re-planned); the need for flexibility when implementing responses; complementary identification/analysis techniques; the necessity of resilience/scenario planning for major disruption.</p>
+<p><strong>Interactions with other domains:</strong> closely interrelated with <strong>Scope, Schedule, Finance, and Stakeholders</strong>. Stakeholders are a critical <em>source</em> of risk information and help shape assessment methods. In predictive projects with stable scope, schedule reserves absorb identified risk; in adaptive projects, plans are adjusted continuously as new risk surfaces. Risk can expand or shrink scope, which flows into schedule and budget; Finance is directly shaped by risk realisation (cost changes internally, revenue changes externally).</p>
+<p><strong>Check outcomes:</strong>
+- Environmental awareness exists → the team factors in technical/social/political/market/economic context when evaluating risk.
+- Proactive exploration and response to uncertainty → responses align with budget/schedule/performance constraints.
+- Capacity to anticipate threats and opportunities → a well-understood process exists for identifying, assessing, documenting, and responding to risk.
+- Minimal negative impact from unknowns → reserves are used, delivery dates are met, budget stays within variance threshold.
+- Opportunities realised → established mechanisms identify, leverage, and track opportunity realisation.
+- Contingency reserves used effectively → proactive prevention limits reserve consumption.
+- Resilience is being developed → awareness of the org’s business continuity/emergency response plan; a project continuity plan exists where applicable; a management reserve covers unknown risk; the team can quickly restructure during crisis.</p>
+<h3 id="cross-domain-synthesis-how-the-seven-domains-actually-interlock">Cross-Domain Synthesis — How the Seven Domains Actually Interlock</h3>
+<p>Reading the seven “Interactions” sections together reveals the real topology (not just a list, but a <em>shape</em>):
+- <strong>Governance sits over all of them</strong> — it is explicitly described as holistic and integrative.
+- <strong>Scope, Schedule, and Finance form the tightest triangle</strong> — nearly every domain’s interaction section names this trio first, because a change in any one mechanically forces a change in the other two (the “integrated baseline”).
+- <strong>Stakeholders and Risk are the two “sensing” domains</strong> — they surface information (stakeholder input, risk signals) that the Scope-Schedule-Finance triangle must react to.
+- <strong>Resources is the domain that touches everything operationally</strong> — it’s the one PMBOK explicitly says “interacts with all other performance domains,” because people and physical assets are the substrate every other domain’s work runs on.</p>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-5" open="open">
+<summary><span class="part-eyebrow">Part 5</span><span class="part-title">TAILORING (The "How Do We Know / What Factors" Chapter)</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<p>This is the PMBOK chapter most directly built to answer your question — it is <em>entirely</em> about factors that influence project management and how to know if the current approach is working.</p>
+<h2 id="51-why-tailor">5.1 Why Tailor?</h2>
+<p>“There is no single approach that can be applied to all projects all of the time.” Tailoring variables include: <strong>criticality, scale, duration, complexity, industry standards, organisational culture, number of stakeholders, and organisational project management maturity.</strong> Too few processes → ineffective management. Too many → costly, wasteful. Benefits of getting it right: more team commitment (they helped design it), stronger customer focus, more efficient resource use.</p>
+<p>Projects must balance competing demands: delivering quickly, minimising cost, optimising value, high-quality deliverables, regulatory/sustainability compliance, diverse stakeholder expectations, and adaptability. Note: tailoring freedom can itself be constrained — by mandated organisational policy or contractual terms.</p>
+<h2 id="52-what-can-be-tailored-three-aspects">5.2 What Can Be Tailored (Three Aspects)</h2>
+<ol>
+<li><strong>Life cycle and development approach selection</strong> — e.g., a data-centre project might use predictive for physical construction and adaptive for defining computing capability; viewed at the project level this is a hybrid approach, even though each subteam experiences only one approach.</li>
+<li><strong>Processes</strong> — elements can be <strong>added</strong> (address unique conditions), <strong>modified</strong> (fit team needs), <strong>removed</strong> (cut unnecessary cost/effort), <strong>blended</strong> (combine for added value), or <strong>aligned</strong> (ensure consistent definition/application).</li>
+<li><strong>Engagement</strong> — three sub-levers:
+   - <strong>People</strong> — assessing and adapting to the skills/capabilities of leadership and team.
+   - <strong>Empowerment</strong> — deciding which decisions are deferred to the team vs. retained centrally.
+   - <strong>Integration</strong> — welding a diverse mix of contractors, partners, and internal staff into one functioning team.</li>
+</ol>
+<h2 id="53-the-tailoring-process-four-steps-structure">5.3 The Tailoring Process — Four Steps (Structure)</h2>
+<pre><code>1) Select Initial Development Approach
+        ↓
+2) Tailor for the Organization
+        ↓
+3) Tailor for the Project
+        ↓
+4) Implement Ongoing Improvement  →  (loops back — inspect &amp; adapt)
+</code></pre>
+<h3 id="step-1-select-initial-development-approach">Step 1 — Select Initial Development Approach</h3>
+<p>Uses a <strong>suitability filter</strong>: not a rigid procedure, but a decision-making tool combining assessment of project characteristics with other data to decide predictive/adaptive/hybrid — evaluated against culture, team dynamics, and project factors.</p>
+<h3 id="step-2-tailor-for-the-organization">Step 2 — Tailor for the Organization</h3>
+<p>Organisations can supply methodologies as starting points; a <strong>PMO</strong>, where one exists, often reviews/approves tailored approaches — internal-only tailoring usually needs just PM approval, while tailoring that affects external groups typically needs PMO sign-off. Tailoring should also account for the surrounding <strong>program/portfolio context</strong> for consistency. In <strong>multi-organisation projects</strong>, tailoring must harmonise each partner’s processes, governance, and delivery approach.</p>
+<p><em>(PMO note: modern PMOs increasingly act as strategy-execution enablers, not just process police — their long-term relevance depends on adapting to what the organisation values most.)</em></p>
+<h3 id="step-3-tailor-for-the-project-three-attribute-groups">Step 3 — Tailor for the Project (Three Attribute Groups)</h3>
+<p><strong>Product or deliverable:</strong> standards compliance; type of product (tangible vs. intangible); industry/market (regulated? fast-moving? competitive?); technology stability; timeframe; requirements stability; security/confidentiality; suitability for incremental/iterative delivery.</p>
+<p><strong>Project team:</strong> team size; geography (remote vs. co-located); organisational distribution of stakeholders; team experience; access to the customer; team diversity.</p>
+<p><strong>Culture:</strong> buy-in; trust; empowerment; organisational culture fit (empowering vs. specifying-and-checking; local vs. external decision-making).</p>
+<h3 id="step-4-implement-ongoing-improvement">Step 4 — Implement Ongoing Improvement</h3>
+<p>Tailoring is <strong>never a one-time exercise</strong>. Review points, phase gates, and retrospectives are the built-in opportunities to inspect and adapt process, approach, and delivery frequency. Team engagement in tailoring builds ownership and signals an innovation mindset over status-quo settling. Note: <strong>the way an organisation tailors can itself be tailored</strong> — not every organisation needs all four steps at full formality.</p>
+<h2 id="54-tailoring-the-performance-domains">5.4 Tailoring the Performance Domains</h2>
+<p>The six principles guide <em>how</em> practitioners tailor each performance domain to the project’s unique context — this is the formal link between Part 3 (Principles) and Part 4 (Domains) of this chapter: <strong>principles guide mindset and behaviour → mindset and behaviour tailor the performance domains → tailored domains fit the project context.</strong></p>
+<h2 id="55-diagnostics-how-you-actually-know-tailoring-is-working">5.5 Diagnostics — How You Actually Know Tailoring Is Working</h2>
+<p><strong>Primary mechanism:</strong> periodic reviews — retrospectives or lessons learned — assess whether the current approach is effective and surface where more tailoring is needed. Teams without retrospectives should watch <strong>issues, threats, quality metrics, and stakeholder feedback</strong> as the substitute signal.</p>
+<p><strong>Common Situations and Tailoring Suggestions (memorise this diagnostic table — it is essentially a symptom-to-fix map):</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Tailoring Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deliverables are poor quality</td>
+<td>Root-cause the quality issue; target feedback and QA measures; fix the <strong>process</strong>, don’t just add more verification steps</td>
+</tr>
+<tr>
+<td>Team members unsure how to proceed</td>
+<td>Assess actual support needs — guidance, mentorship, training, knowledge-sharing</td>
+</tr>
+<tr>
+<td>Team members uncooperative, working in silos</td>
+<td>Team-building activities + individual meetings to find the cause; strengthen bonds and coordination</td>
+</tr>
+<tr>
+<td>Long delays waiting for approvals</td>
+<td>Authorise people to decide up to defined value thresholds — streamline approval</td>
+</tr>
+<tr>
+<td>Too much work in progress / waste</td>
+<td>Value stream mapping and Kanban boards to visualise, identify, and resolve</td>
+</tr>
+<tr>
+<td>Stakeholders disengaged or giving negative feedback</td>
+<td>Check whether communication is timely/relevant; tailor method to balance simplicity vs. depth</td>
+</tr>
+<tr>
+<td>Lack of transparency about progress</td>
+<td>Verify the right data is collected/analysed/shared/discussed; validate agreement on measures</td>
+</tr>
+<tr>
+<td>Recurring surprise risks/issues force reactive work</td>
+<td>Explore root causes — likely a gap in process or activity coverage</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="56-summary">5.6 Summary</h2>
+<p>Tailoring = adapting approach, governance, and process to fit environment and objectives — analysing and modifying <strong>people, processes, and tools.</strong> It’s typically led by project stakeholders, with organisational guidance ensuring consistency, and it is <strong>not just about making changes — it’s about verifying and validating that tailored approaches are actually effective.</strong> That last sentence is the direct bridge back to “how do you know it’s working”: tailoring without diagnostics is just guessing.</p>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-6" open="open">
+<summary><span class="part-eyebrow">Part 6</span><span class="part-title">FOCUS AREAS (Full Detail, All Five)</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<h2 id="61-what-they-are-and-why-they-replaced-process-groups">6.1 What They Are and Why They Replaced “Process Groups”</h2>
+<p>The five <strong>Project Management Focus Areas</strong> — Initiating, Planning, Executing, Monitoring &amp; Controlling, Closing — are the fundamental actions of <em>any</em> project regardless of development approach. They were previously called “Process Groups” but are <strong>“reimagined”</strong> because today’s projects satisfy these five needs through <strong>formal processes, informal practices, and/or flexible policies</strong> — not formal process alone.</p>
+<div class="callout callout-trap">
+<div class="callout-head"><span class="callout-icon">⚖️</span><span class="callout-label">Exam Trap</span></div>
+<p>Focus Areas are <strong>not</strong> project phases, and they are <strong>not sequential</strong> — they overlap and interact dynamically throughout the life cycle.</p>
+</div>
+<h2 id="62-each-focus-area-with-its-components-and-key-benefit">6.2 Each Focus Area, With Its Components and Key Benefit</h2>
+<p><strong>Initiating</strong> — defines a new project/phase and secures formal authorisation. Initial scope is defined, initial funding committed, stakeholders identified, roles assigned. Signature artefacts: <strong>project charter, stakeholder register</strong>. Key benefit: projects are only authorised when aligned with strategy and when the business case/benefits/stakeholders have been considered from day one.</p>
+<p><strong>Planning</strong> — establishes intended scope, refines objectives, develops the course of action. Uses <strong>progressive elaboration</strong> (predictive tends to front-load planning; adaptive does brief up-front “roadmapping” then continuous replanning — sometimes called rolling wave). Signature artefacts: <strong>project management plan, product backlog</strong>. Key benefit: defines the course of action for successful completion.</p>
+<p><strong>Executing</strong> — completes the work per the currently agreed course of action: coordinating resources, managing stakeholder engagement, performing activities. The PM plan <strong>can and should change</strong> whenever doing so enhances the value proposition. This is where the chosen development approach is <strong>most visible</strong> in practice. Key benefit: focused execution toward the integrated baseline’s value proposition.</p>
+<p><strong>Monitoring &amp; Controlling</strong> — tracks, measures, reviews, and regulates progress/performance; identifies where plan changes are needed and initiates them. <strong>Monitoring</strong> = comparing performance data, producing measures, comparing actual vs. planned, reporting. <strong>Controlling</strong> = analysing variances, assessing trends, evaluating alternatives, recommending corrections (negotiated and agreed with stakeholders). For a stable PM plan, effort here stays fairly consistent; for adaptive projects with frequent change, effort is less consistent. <strong>Runs in parallel with all other Focus Areas — it is not a standalone stage.</strong></p>
+<p><strong>Closing</strong> — formally completes or closes a project, phase, or contract (or terminates early). May verify that other Focus Areas’ actions are actually finished before declaring completion. Key benefit: appropriate close-out and transition to operations that meets or exceeds target objectives — including verifying outputs, outcomes, <strong>and benefits</strong>. Also covers early/suspended closure (e.g., cancelling to minimise a negative return is itself a valid, deliberate use of this Focus Area).</p>
+<h2 id="63-focus-areas-as-a-whole-how-they-interact">6.3 Focus Areas as a Whole — How They Interact</h2>
+<p>They are independent of application area (marketing, IT, accounting) and independent of industry. They are independent of development approach too — <strong>every</strong> approach honours all five in some form. Individual actions within a Focus Area are often <strong>iterated</strong> before a phase or project completes. They are <strong>not strictly sequential and often overlap within a single phase</strong> — e.g., planning and monitoring can happen simultaneously. PMBOK’s own example: in a predictive construction project, Engineering/Procurement/Construction/Commissioning/Handover sub-activities show varying <strong>levels of effort</strong> across all five Focus Areas simultaneously, rather than one Focus Area finishing before the next starts.</p>
+<h2 id="64-how-you-know-focus-areas-are-working">6.4 How You Know Focus Areas Are Working</h2>
+<p>There’s no single “Focus Area health check” table in PMBOK (unlike the domains), but the diagnostic logic is embedded in each Focus Area’s “key benefit”: ask whether that specific benefit is actually being realised —
+- Initiating: is the project authorised <em>because</em> it’s strategically aligned, or just because someone asked for it?
+- Planning: does the course of action actually get the team to the objective, and is it still being refined as new information arrives?
+- Executing: is work matching the agreed baseline, and is the plan itself being revisited when value would improve?
+- Monitoring &amp; Controlling: are variances actually triggering negotiated corrective action, not just being logged?
+- Closing: are outputs <strong>and outcomes and benefits</strong> verified — not just “deliverable handed over”?</p>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-7" open="open">
+<summary><span class="part-eyebrow">Part 7</span><span class="part-title">PROJECT LIFE CYCLES (Full Detail)</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<h2 id="71-components">7.1 Components</h2>
+<p>Five factors define a life cycle: <strong>phases; development approach (predictive/adaptive/hybrid); approach-selection considerations; delivery cadence; Focus Areas.</strong></p>
+<h2 id="72-phases-and-gates-structure">7.2 Phases and Gates — Structure</h2>
+<p>A <strong>phase</strong> = a group of logically related activities culminating in deliverable(s)/outcome(s); may be sequential, transitional, or overlapping, described by attributes like name, duration, resource requirements, entrance criteria, and exit criteria. A <strong>phase gate</strong> (stage gate/governance gate/tollgate/kill point/decision-point review) checks whether exit criteria are met before proceeding — decision options: <strong>continue / continue with modification / end / remain / repeat / park.</strong> Gates can sit at the <strong>start</strong> of a phase too (pre-phase gates), confirming alignment, resourcing, and risk posture before committing.</p>
+<p><strong>Two universal patterns across all life cycles:</strong>
+- Risk, uncertainty, and the cost of changes are <strong>highest at the start</strong> and decrease as the project progresses.
+- In predictive scenarios specifically, cost and staffing are low at start, peak during execution, and drop sharply at close; stakeholders’ ability to cheaply influence scope is highest early and decreases over time (hence the value of early engagement).</p>
+<h2 id="73-development-approaches-full-selection-logic">7.3 Development Approaches — Full Selection Logic</h2>
+<p><strong>The spectrum:</strong> Predictive → Hybrid → Adaptive (increasingly iterative and incremental). Chosen by the PM in consultation with the team.</p>
+<h3 id="selection-factors-grouped-exactly-as-pmbok-groups-them">Selection factors, grouped exactly as PMBOK groups them:</h3>
+<p><strong>Deliverables factors:</strong> degree of innovation needed; requirements certainty; degree of scope stability; ease of change; delivery options; risk profile; safety requirements; value of frequent feedback; regulatory oversight level.</p>
+<p><strong>Project factors:</strong> level of stakeholder involvement needed; schedule constraints (fixed end date → predictive; value from early partial delivery → adaptive); financing uncertainty; project size/complexity; team experience/skills; interdependencies on other projects/departments.</p>
+<p><strong>Organisation factors:</strong> organisational structure (fixed/hierarchical → predictive; network-oriented → adaptive/hybrid); culture (directive/plan-driven vs. embracing uncertainty/self-managed); organisational capability (maturity of PM processes); team size and location (adaptive favours smaller, often 3–9 person, sometimes co-located teams — though remote work suits some teams better).</p>
+<h3 id="the-inverted-triangle-predictive-vs-adaptive-constraint-logic">The Inverted Triangle (Predictive vs. Adaptive Constraint Logic)</h3>
+<ul>
+<li><strong>Predictive:</strong> Scope fixed → Budget and Schedule variable (absorb unexpected change).</li>
+<li><strong>Adaptive:</strong> Budget and Schedule fixed → Scope variable (absorb unexpected change).</li>
+</ul>
+<h3 id="hybrid-four-recognised-patterns">Hybrid — Four Recognised Patterns</h3>
+<ol>
+<li>Adaptive development <strong>followed by</strong> a predictive rollout.</li>
+<li>Adaptive and predictive used <strong>simultaneously</strong> (parallel streams).</li>
+<li>Largely <strong>predictive</strong> with a small adaptive component.</li>
+<li>Largely <strong>adaptive</strong> with a predictive component.</li>
+</ol>
+<p><em>Disciplined Agile® framing (three hybrid levels):</em> <strong>Level 1</strong> — predictive-dominant with adaptive elements for specific pain points; <strong>Level 2</strong> — both approaches contribute significantly; <strong>Level 3</strong> — adaptive-dominant with predictive elements for business constraints. “Today, most projects require a hybrid approach” — relying on one approach alone rarely handles modern complexity.</p>
+<p><strong>Incremental delivery inside a predictive framework:</strong> when scope is well understood up front but sheer size/complexity/risk favour phased delivery, the project is divided into increments, each delivering part of the whole and building on the last — stakeholders get earlier value while the overall scope/timeline stays fixed.</p>
+<h2 id="74-delivery-cadence">7.4 Delivery Cadence</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Cadence</th>
+<th>Definition</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single delivery</strong></td>
+<td>All outcomes released at the end</td>
+<td>Process-reengineering roll-out</td>
+</tr>
+<tr>
+<td><strong>Multiple deliveries</strong></td>
+<td>Several components at different times — sequential or parallel</td>
+<td>Drug-trial phases (sequential); building-security upgrade (parallel)</td>
+</tr>
+<tr>
+<td><strong>Periodic deliveries</strong></td>
+<td>Multiple deliveries on a <em>regular fixed</em> schedule</td>
+<td>Internal releases every 2 weeks</td>
+</tr>
+<tr>
+<td><strong>Continuous delivery</strong></td>
+<td>Ongoing, always production-ready increments via automation</td>
+<td>DevOps-style flow</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="75-how-you-know-the-life-cycle-choice-is-working">7.5 How You Know the Life Cycle Choice Is Working</h2>
+<p>There’s no single dedicated “check outcomes” table for life cycles (that lives inside the domains, especially Schedule and Scope), but the diagnostic signal is explicit in the text: watch for <strong>mismatch symptoms</strong> —
+- A predictive project experiencing constant scope churn signals the approach should have been adaptive/hybrid.
+- An adaptive project missing a hard regulatory deadline signals under-use of predictive discipline where it was actually needed.
+- A hybrid project where one stream’s cadence is silently blocking another stream signals the <em>hybrid pattern</em> (parallel vs. sequential) was mismatched to the deliverables’ real interdependency.
+Combine this with the <strong>Tailoring diagnostics table (Part 5.5)</strong> — life cycle mismatch is exactly the kind of thing retrospectives and lessons-learned reviews are designed to catch.</p>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-8" open="open">
+<summary><span class="part-eyebrow">Part 8</span><span class="part-title">THE FULL SYSTEM, TIED TOGETHER</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<p>Read top to bottom, this is the whole architecture in one pass:</p>
+<ol>
+<li><strong>Environment</strong> (EEFs + OPAs + organisational structure) sets the <em>constraints</em> the project must work within.</li>
+<li><strong>Mindset</strong> (proactive / ownership / value-driven) is the practitioner’s internal stance in response to that environment.</li>
+<li><strong>Six Principles</strong> turn the mindset into actionable guidance — and the principles explicitly state which <strong>Performance Domains</strong> they connect to most strongly.</li>
+<li><strong>Seven Performance Domains</strong> are where the actual mechanics happen — each with its own key concepts, ~40 named processes total, tailoring factors, cross-domain interactions, and a check-outcomes table that tells you if that domain is healthy.</li>
+<li><strong>Tailoring</strong> is the meta-layer that reshapes steps 3–4 for this specific project — using a four-step process (select approach → tailor for org → tailor for project → improve continuously) and diagnosed through retrospectives and the symptom-to-fix table.</li>
+<li><strong>Focus Areas</strong> (Initiating → Closing) are the five universal actions that happen — overlapping, not sequential — inside whatever life cycle you’ve chosen.</li>
+<li><strong>Life Cycle</strong> (phases + development approach + cadence) is the timing skeleton everything else executes against, itself selected using an explicit set of deliverable/project/organisation factors and checked via phase gates.</li>
+<li><strong>Governance</strong> is the one domain PMBOK explicitly calls “holistic and integrative” — it is the closest thing to a control tower watching all of the above simultaneously.</li>
+</ol>
+<hr/>
+</div>
+</details>
+<details class="part" id="part-9" open="open">
+<summary><span class="part-eyebrow">Part 9</span><span class="part-title">WHAT YOU MAY HAVE MISSED</span><span aria-hidden="true" class="part-chevron"></span></summary>
+<div class="part-body">
+<p>Content that a condensed exam-prep pass (including the earlier study notes and slide deck) typically compresses away, but that a complete study of the source material includes:</p>
+<ol>
+<li><strong>The System for Value Delivery diagram logic</strong> — Vision/Mission/Strategy → Portfolio Management → Program &amp; Product Management → Operations, with an explicit <strong>information-flow loop</strong> (strategy and desired outcomes flow down; performance and outcome data flow up). Most study guides mention “portfolio &gt; program &gt; project &gt; operations” as a static hierarchy and miss that PMBOK frames it as a <strong>live feedback system</strong>.</li>
+<li><strong>Business value’s tangible/intangible taxonomy</strong> (goodwill, brand recognition, acquired knowledge, compliance, reputation, employee well-being, environmental awareness) — often reduced to “ROI” in summaries.</li>
+<li><strong>The dual-dimension definition of project success</strong> (outcome success vs. management-process success) and the <strong>Sydney Opera House / Montreal overpass</strong> contrast pair — a favourite scenario-question source.</li>
+<li><strong>Enterprise Environmental Factors and Organizational Process Assets</strong>, split into internal/external and policy/knowledge-repository categories — these are the actual PMBOK answer to “what factors influence the foundational elements,” and are almost always skipped in condensed guides.</li>
+<li><strong>The organisational structures table</strong> (organic, functional, multidivisional, three matrix types, project-oriented, virtual/network, hybrid) with PM authority/role/resource-availability implications.</li>
+<li><strong>The seven Functions Associated with Projects</strong> (oversight/coordination, feedback, facilitation/support, performing work, applying expertise, organisational direction, providing resources) — a role-agnostic way of describing project work that’s easy to miss if you only study named roles.</li>
+<li><strong>All ~40 named processes</strong>, grouped correctly under their seven domains — most condensed guides mention “processes exist” without listing them.</li>
+<li><strong>The seven domain-specific “Check Outcomes” tables</strong> — this is PMBOK’s own built-in answer to “how do we know it’s working,” including actual formulas (Scope Definition Accuracy %, Scope Creep %, Requirements Stability %) that are easy to lose in a slide-level summary.</li>
+<li><strong>The entire Tailoring chapter</strong> (Section 3 of the PMBOK Guide) — why tailor, what to tailor (life cycle, processes, engagement), the four-step tailoring process, the <strong>suitability filter</strong> concept, PMO’s role in approving tailored approaches, multi-organisation tailoring, and — critically — the <strong>Common Situations and Tailoring Suggestions diagnostic table</strong>, which is the single most direct “symptom → fix” tool in the entire standard.</li>
+<li><strong>Focus Areas’ individual “key benefit” statements</strong> and the explicit predictive-project example showing all five Focus Areas running in parallel at varying levels of effort across Engineering/Procurement/Construction/Commissioning/Handover — most summaries state “they overlap” without showing what that looks like in practice.</li>
+<li><strong>Product management considerations</strong> — the product life cycle (introduction → growth → maturity → decline/retirement) and how programs/projects can be launched at any point in that cycle to add or enhance capability — a topic almost entirely absent from condensed PMP prep material but explicitly in-scope for the Business Environment domain of the exam.</li>
+<li><strong>Risk vs. Issue vs. Overall Risk vs. Risk Exposure vs. Risk Appetite vs. Risk Threshold</strong> as six <em>distinct</em> defined terms — condensed guides usually only teach risk vs. issue and drop the other four.</li>
+</ol>
+<hr/>
+<p><em>This chapter is a structural companion to, not a replacement for, your earlier PMP Master Study Notes and slide deck — use those for spaced-repetition and rapid recall, and this chapter when you need to understand </em><em>why</em><em> the exam’s scenario questions work the way they do.</em></p>
+</div>
+</details>
+    </article>
+
+    <footer class="doc-footer">
+      <p>Companion to your PMP&reg; Master Study Notes and Exam Prep slide deck. Grounded in <em>The Standard for Project Management</em> &amp; <em>PMBOK&reg; Guide (8th Edition)</em>.</p>
+    </footer>
+  </main>
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<script>
+// ---------- Reading progress bar ----------
+const progressBar = document.getElementById('progressBar');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop;
+  const max = h.scrollHeight - h.clientHeight;
+  const pct = max > 0 ? (scrolled / max) * 100 : 0;
+  progressBar.style.width = pct + '%';
+}
+document.addEventListener('scroll', updateProgress, { passive: true });
+updateProgress();
+
+// ---------- Back to top ----------
+const backToTop = document.getElementById('backToTop');
+function toggleBackToTop(){
+  if (window.scrollY > 600) backToTop.classList.add('visible');
+  else backToTop.classList.remove('visible');
+}
+document.addEventListener('scroll', toggleBackToTop, { passive: true });
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+toggleBackToTop();
+
+// ---------- Mobile sidebar ----------
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarCloseBtn = document.getElementById('sidebarClose');
+function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('open'); }
+function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('open'); }
+menuToggle.addEventListener('click', () => {
+  sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+});
+overlay.addEventListener('click', closeSidebar);
+if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+});
+sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  if (window.innerWidth <= 980) closeSidebar();
+}));
+
+// ---------- Expand / Collapse all ----------
+const allDetails = () => Array.from(document.querySelectorAll('details.part'));
+document.getElementById('expandAll').addEventListener('click', () => {
+  allDetails().forEach(d => d.open = true);
+});
+document.getElementById('collapseAll').addEventListener('click', () => {
+  allDetails().forEach(d => d.open = false);
+});
+
+// ---------- Print ----------
+document.getElementById('printBtn').addEventListener('click', () => {
+  window.print();
+});
+window.addEventListener('beforeprint', () => {
+  allDetails().forEach(d => d.open = true);
+});
+
+// ---------- Reading time estimate ----------
+(function estimateReadTime(){
+  const text = document.querySelector('.prose').innerText || '';
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.max(1, Math.round(words / 200));
+  document.getElementById('readTime').textContent = `${words.toLocaleString()} words · ~${minutes} min read`;
+})();
+
+// ---------- Active section highlighting ----------
+const navPartLinks = Array.from(document.querySelectorAll('.nav-part-link'));
+const navSubLinks = Array.from(document.querySelectorAll('.nav-sub a'));
+const allNavLinks = navPartLinks.concat(navSubLinks);
+
+const partSections = Array.from(document.querySelectorAll('details.part'));
+const h2Targets = Array.from(document.querySelectorAll('.part-body h2'));
+
+function clearActive(){ allNavLinks.forEach(a => a.classList.remove('active')); }
+
+function setActiveById(id){
+  clearActive();
+  const link = allNavLinks.find(a => a.getAttribute('href') === '#' + id);
+  if (link) {
+    link.classList.add('active');
+    link.scrollIntoView({ block: 'nearest' });
+  }
+}
+
+const observer = new IntersectionObserver((entries) => {
+  // pick the entry closest to top that is intersecting
+  const visible = entries.filter(e => e.isIntersecting);
+  if (visible.length === 0) return;
+  visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+  const top = visible[0].target;
+  setActiveById(top.id);
+}, { rootMargin: '-15% 0px -70% 0px', threshold: [0, 1] });
+
+h2Targets.forEach(h => observer.observe(h));
+// Also observe part summaries themselves in case a part has no h2 in view yet
+partSections.forEach(d => {
+  const summary = d.querySelector('summary');
+  observer.observe(d);
+});
+
+// ---------- Sidebar search (filters by heading text) ----------
+const navSearch = document.getElementById('navSearch');
+navSearch.addEventListener('input', () => {
+  const q = navSearch.value.trim().toLowerCase();
+  document.querySelectorAll('.nav-group').forEach(group => {
+    const partLink = group.querySelector('.nav-part-link');
+    const subLinks = Array.from(group.querySelectorAll('.nav-sub a'));
+    let groupMatches = partLink.textContent.toLowerCase().includes(q);
+    let anySubMatch = false;
+    subLinks.forEach(a => {
+      const match = a.textContent.toLowerCase().includes(q);
+      a.parentElement.style.display = (q === '' || match) ? '' : 'none';
+      if (match) anySubMatch = true;
+    });
+    group.style.display = (q === '' || groupMatches || anySubMatch) ? '' : 'none';
+  });
+});
+
+// ---------- Auto-open the part containing the URL hash on load ----------
+window.addEventListener('DOMContentLoaded', () => {
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target) {
+      const parentDetails = target.closest('details.part');
+      if (parentDetails) parentDetails.open = true;
+      setTimeout(() => target.scrollIntoView({ block: 'start' }), 50);
+    }
+  }
+});
+
+// Also: clicking a sidebar sub-link should open the parent details if closed
+allNavLinks.forEach(a => {
+  a.addEventListener('click', (e) => {
+    const id = a.getAttribute('href').slice(1);
+    const target = document.getElementById(id);
+    if (target) {
+      const parentDetails = target.closest('details.part') || target;
+      if (parentDetails && parentDetails.tagName === 'DETAILS') parentDetails.open = true;
+    }
+  });
+});
+
+</script>
+</body>
+</html>
